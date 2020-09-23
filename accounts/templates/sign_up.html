@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+
+{% block title %} {% endblock title %}
+
+{% block content %}
+    {% load static %}
+
+    <section id="signUp">
+        <div class="container py-5">
+            <div class="row">
+                <div class="col-lg-8">
+
+                </div>
+                <div class="col-lg-4">
+                    <div class="">
+                        <h2 class="text-center">Sign Up Now!</h2>
+                        <form method="POST" action="">
+                            {% csrf_token %}
+                            <p class="my-3">{{ form.first_name }}</p>
+                            <p class="my-3">{{ form.last_name }}</p>
+                            <p class="my-3">{{ form.username }}</p>
+                            <p class="my-3">{{ form.email }}</p>
+                            <p class="my-3">{{ form.password }}</p>
+                            <button type="submit" class="btn btn-outline-warning btn-block py-3 mt-4">
+                                Sign Up <i class="fa px-3 fa-2x fa-long-arrow-right my-0" aria-hidden="true" style="vertical-align: middle"></i>
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+{% endblock content %}

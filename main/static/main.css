@@ -1,0 +1,14 @@
+p{
+    font-size: 14px;
+    line-height: 18px;
+}
+a{
+    font-size: 14px;
+    line-height: 18px;
+}
+
+.btn{
+    font-size: 14px !important;
+    line-height: 18px !important;
+    /*border-radius: 0 !important;*/
+}
