@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from .models import UserProfile
 from django.contrib.auth.models import User
-from .forms import SignUpForm
+from .forms import SignUpForm, LoginForm
 from django.contrib.auth import login, logout
 from django.contrib import messages
 # Create your views here.
@@ -34,4 +34,17 @@ def log_out(request):
         return redirect('main:homepage')
     else:
         return redirect('main:homepage')
+
+
+def login_view(request):
+    if request.method == 'POST':
+        form = LoginForm(data=request.POST)
+        if form.is_valid():
+            user = form.get_user()
+            login(request, user)
+            messages.success(request, 'You have successfully logged as {name}.'.format(name=user.username))
+            return redirect('main:homepage')
+    else:
+        form = LoginForm()
+    return render(request, 'login_view.html', {'form': form})
 
