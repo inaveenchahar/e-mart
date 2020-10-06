@@ -4,6 +4,34 @@
 
 {% block content %}
 
+    <section>
+        <div class="container py-md-3">
+            {% for category in all_categories %}
+                <div class="my-3">
+                    <h4>{{ category.title | upper }}</h4>
+                    {% for product in category.product_set.all %}
+                        <div class="row">
+                            <div class="col-lg-3">
+                                <div class="card border-0">
+                                    <a href="">
+                                        <img class="card-img-top" src="{{ product.image.url }}">
+                                    </a>
+                                    <div class="card-body pt-md-3 pb-md-0 bg-light">
+                                        <p class="card-title my-0">{{ product.title }}</p>
+                                    </div>
+                                    <div class="card-footer clearfix border-0 pt-3 pb-4">
+                                        <span class="lead" style="vertical-align: middle">{{ product.price }}</span>
+                                        <a href="" class="btn btn-primary float-right">Add to Cart</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                    <hr>
+                </div>
+            {% endfor %}
+        </div>
+    </section>
 
 
 {% endblock content %}

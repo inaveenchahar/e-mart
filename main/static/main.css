@@ -12,3 +12,21 @@ a{
     line-height: 18px !important;
     /*border-radius: 0 !important;*/
 }
+
+h1{
+    font-size: 32px !important;
+    line-height: 40px !important;
+}
+
+h2{
+    font-size: 24px !important;
+    line-height: 30px !important;
+}
+h3{
+    font-size: 18.72px !important;
+    line-height: 24px !important;
+}
+h4{
+    font-size: 16px !important;
+    line-height: 20px !important;
+}

@@ -24,6 +24,7 @@ class Product(models.Model):
     category = models.ManyToManyField(Category, help_text='Product will appear in selected categories')
     title = models.CharField(max_length=100, help_text='Product name')
     slug = models.SlugField(max_length=100)
+    image = models.ImageField(null=True, upload_to='images/product')
     price = models.FloatField(help_text='Product price')
     order = models.IntegerField(blank=True, help_text='Display order')
     visible = models.BooleanField(default=True, help_text='Visible to users')
