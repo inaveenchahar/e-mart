@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+ {% load static %}
+{% block title %} Product Detail {% endblock title %}
+
+{% block content %}
+
+    <section class="my-md-3">
+        <div class="container py-md-3">
+            <div class="row">
+                <div class="col-lg-6">
+                    <img src="{{ product.image.url }}" class="embed-responsive">
+                </div>
+                <div class="col-lg-6">
+                    <h1>{{ product.title }}</h1>
+                    <p>in <span class="text-danger">{{ category.title }}</span></p>
+                    <p class="my-2" style="font-size: 40px">{{ product.price | floatformat:"0" }} <i class="fa fa-inr my-0" aria-hidden="true"></i></p>
+                    <p class="text-secondary">Quantity: 1</p>
+                    <a  class="d-inline-block btn btn-warning my-0 py-3 px-5 my-5" href="">
+                        <span style="font-size: 18px"> Buy Now</span>
+                    </a>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+{% endblock content %}

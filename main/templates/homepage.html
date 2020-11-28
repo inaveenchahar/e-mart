@@ -13,14 +13,17 @@
                         <div class="row">
                             <div class="col-lg-3">
                                 <div class="card border-0">
-                                    <a href="">
+                                    <a href="{% url 'product:product_details' category.slug product.slug product.id %}">
                                         <img class="card-img-top" src="{{ product.image.url }}">
                                     </a>
                                     <div class="card-body pt-md-3 pb-md-0 bg-light">
                                         <p class="card-title my-0">{{ product.title }}</p>
                                     </div>
                                     <div class="card-footer clearfix border-0 pt-3 pb-4">
-                                        <span class="lead" style="vertical-align: middle">{{ product.price }}</span>
+                                        <span class="lead" style="vertical-align: middle">
+                                            {{ product.price | floatformat:"0" }}
+                                            <i class="fa fa-inr my-0" aria-hidden="true"></i>
+                                        </span>
                                         <a href="" class="btn btn-primary float-right">Add to Cart</a>
                                     </div>
                                 </div>
