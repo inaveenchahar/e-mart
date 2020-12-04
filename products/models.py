@@ -41,17 +41,7 @@ class Product(models.Model):
         verbose_name_plural = 'Products'
 
 
-class Cart(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    product = models.ForeignKey(Product, on_delete=models.Empty, null=True)
-    added_on = models.DateTimeField(auto_now_add=True)
-    updated_on = models.DateTimeField(auto_now=True)
 
-    def __str__(self):
-        return self.user.username
 
-    class Meta:
-        ordering = ['-added_on']
-        verbose_name = 'Cart'
-        verbose_name_plural = 'Carts'
+
 

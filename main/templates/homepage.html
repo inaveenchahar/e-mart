@@ -5,33 +5,37 @@
 {% block content %}
 
     <section>
-        <div class="container py-md-3">
+        {% if message.success %}
+            <div class="alert alert-success alert-dismissible">
+                <button type="button" class="close" data-dismiss="alert">&times;</button>
+                {{ message }}
+            </div>
+        {% endif %}
+        <div class="container py-md-5">
             {% for category in all_categories %}
-                <div class="my-3">
-                    <h4>{{ category.title | upper }}</h4>
-                    {% for product in category.product_set.all %}
-                        <div class="row">
-                            <div class="col-lg-3">
-                                <div class="card border-0">
-                                    <a href="{% url 'product:product_details' category.slug product.slug product.id %}">
-                                        <img class="card-img-top" src="{{ product.image.url }}">
-                                    </a>
-                                    <div class="card-body pt-md-3 pb-md-0 bg-light">
-                                        <p class="card-title my-0">{{ product.title }}</p>
-                                    </div>
-                                    <div class="card-footer clearfix border-0 pt-3 pb-4">
-                                        <span class="lead" style="vertical-align: middle">
-                                            {{ product.price | floatformat:"0" }}
-                                            <i class="fa fa-inr my-0" aria-hidden="true"></i>
-                                        </span>
-                                        <a href="{% url 'product:cart_product' category.slug product.slug product.id %}" class="btn btn-primary float-right">Add to Cart</a>
-                                    </div>
+                <h4>{{ category.title | upper }}</h4>
+                {% for product in category.product_set.all %}
+                    <div class="row">
+                        <div class="col-lg-3">
+                            <div class="card border-0">
+                                <a href="{% url 'product:product_details' category.slug product.slug product.id %}">
+                                    <img class="card-img-top" src="{{ product.image.url }}">
+                                </a>
+                                <div class="card-body pt-md-3 pb-md-0 bg-light">
+                                    <p class="card-title my-0">{{ product.title }}</p>
+                                </div>
+                                <div class="card-footer clearfix border-0 pt-3 pb-4">
+                                    <span class="lead" style="vertical-align: middle">
+                                        {{ product.price | floatformat:"0" }}
+                                        <i class="fa fa-inr my-0" aria-hidden="true"></i>
+                                    </span>
+                                    <a href="{% url 'cart:cart_product' category.slug product.slug product.id %}" class="btn btn-primary float-right">Add to Cart</a>
                                 </div>
                             </div>
                         </div>
-                    {% endfor %}
-                    <hr>
-                </div>
+                    </div>
+                {% endfor %}
+                <hr>
             {% endfor %}
         </div>
     </section>
