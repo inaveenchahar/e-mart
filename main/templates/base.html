@@ -41,7 +41,7 @@
                         </div>
                     </li>
                     <li class="nav-item mr-md-3">
-                        <a href="" class="nav-link text-white">Cart
+                        <a href="{% url 'cart:view_cart' %}" class="nav-link text-white">Cart
                             <span class="badge badge-pill badge-light">{{ tcp }}</span>
                         </a>
                     </li>
@@ -49,6 +49,11 @@
                         <a href="{% url 'accounts:logout' %}" class="btn btn-danger text-white nav-link">Log Out</a>
                     </li>
                 {% else %}
+                    <li class="nav-item mr-md-3">
+                        <a href="{% url 'cart:view_cart' %}" class="nav-link text-white">Cart
+                            <span class="badge badge-pill badge-light">{{ tcp }}</span>
+                        </a>
+                    </li>
                     <li class="nav-item mr-md-2">
                         <a href="{% url 'accounts:login' %}" class="btn btn-light nav-link text-dark">Login</a>
                     </li>
