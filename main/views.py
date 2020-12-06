@@ -5,7 +5,7 @@ from cart.models import CartProduct
 
 
 def homepage(request):
-    all_categories = Category.objects.filter(visible=True)
+    all_categories = Category.objects.filter(visible=True).order_by('order')
     all_products = Product.objects.filter(visible=True)
     if request.user.is_authenticated:
         """

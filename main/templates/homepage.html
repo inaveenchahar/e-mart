@@ -26,8 +26,8 @@
                                 </div>
                                 <div class="card-footer clearfix border-0 pt-3 pb-4">
                                     <span class="lead" style="vertical-align: middle">
-                                        {{ product.price | floatformat:"0" }}
                                         <i class="fa fa-inr my-0" aria-hidden="true"></i>
+                                        {{ product.price | floatformat:"0" }}
                                     </span>
                                     <a href="{% url 'cart:cart_product' category.slug product.slug product.id %}" class="btn btn-primary float-right">Add to Cart</a>
                                 </div>
