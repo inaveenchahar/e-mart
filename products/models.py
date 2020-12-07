@@ -30,6 +30,7 @@ class Product(models.Model):
     price = models.FloatField(help_text='Product price')
     order = models.IntegerField(blank=True, null=True, help_text='Display order')
     visible = models.BooleanField(default=True, help_text='Visible to users')
+    highlight = models.BooleanField(default=False, help_text='To display product on homepage')
     added_on = models.DateTimeField(auto_now_add=True)
     updated_on = models.DateTimeField(auto_now=True)
 
