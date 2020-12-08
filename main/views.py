@@ -6,7 +6,6 @@ from cart.models import CartProduct
 
 def homepage(request):
     all_categories = Category.objects.filter(visible=True).order_by('order')
-    print(all_categories.count())
     # all_products = Product.objects.filter(category__visible=True, order__lte=4).order_by('order')
     if request.user.is_authenticated:
         """

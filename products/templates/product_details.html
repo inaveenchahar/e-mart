@@ -21,9 +21,15 @@
                     <p>in <span class="text-danger">{{ category.title }}</span></p>
                     <p class="my-4" style="font-size: 40px">{{ product.price | floatformat:"0" }} <i class="fa fa-inr my-0" aria-hidden="true"></i></p>
                     <p class="text-secondary">Quantity: 1</p>
-                    <a  class="d-inline-block btn btn-warning my-0 py-3 px-5 my-4" href="{% url 'cart:cart_product' category.slug product.slug product.id %}">
-                        <span style="font-size: 18px"> Buy Now</span>
-                    </a>
+                    <form method="POST" action="{% url 'cart:cart_product' category.slug product.slug product.id %}">
+                        {% csrf_token %}
+                        <label for="#quantity">Quantity</label>
+                        <input type="number" min="1" id="#quantity" value="1" name="p_quantity">
+                        <input type="submit" class="btn btn-warning" value="Buy Now">
+                    </form>
+{#                    <a  class="d-inline-block btn btn-warning my-0 py-3 px-5 my-4" href="{% url 'cart:cart_product' category.slug product.slug product.id %}">#}
+{#                        <span style="font-size: 18px"> Buy Now</span>#}
+{#                    </a>#}
                 </div>
             </div>
 

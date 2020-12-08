@@ -9,6 +9,11 @@ from django.db.models import Count
 def cart_product(request, c_slug, p_slug, id):
     category = get_object_or_404(Category, slug=c_slug)
     product = get_object_or_404(Product, slug=p_slug, id=id)
+    p_quantity = 1
+    if request.method == 'POST':
+        p_quantity = request.POST.get('p_quantity')
+        if int(p_quantity) < 1:
+            p_quantity = 1
     if request.user.is_authenticated:
         if Cart.objects.filter(completed=False, user=request.user):
             cart = Cart.objects.get(completed=False, user=request.user)
@@ -16,22 +21,44 @@ def cart_product(request, c_slug, p_slug, id):
             cart = Cart.objects.create(user=request.user)
         if CartProduct.objects.filter(cart=cart, product=product):
             c_product = CartProduct.objects.get(cart=cart, product=product)
-            c_product.quantity += 1
-            c_product.save()
         else:
-            new_cart_product = CartProduct.objects.create(
+            c_product = CartProduct.objects.create(
                 cart=cart,
                 product=product,
-                price=product.price
+                price=product.price,
+                quantity=0
             )
+        c_product.quantity += int(p_quantity)
+        c_product.save()
         messages.success(request, "You have successfully added {prdt} in your cart.".format(prdt=product))
         return redirect('main:homepage')
     return render(request, 'product_details.html', {'category': category, 'product': product})
 
 
+def update_cart(request):
+    if request.user.is_authenticated:
+        cart = Cart.objects.get(completed=False, user=request.user)
+        if request.method == 'POST':
+            try:
+                product = cart.cartproduct_set.get(pk=request.POST['product'])
+                p_quantity = int(request.POST['p_quantity'])
+                if p_quantity < 1:
+                    prod = CartProduct.objects.get(id=product.id)
+                    prod.delete()
+                    return redirect('cart:view_cart')
+            except (KeyError, CartProduct.DoesNotExist):
+                return HttpResponse("error occurred")
+            else:
+                product.quantity = p_quantity
+                product.save()
+                return redirect('cart:view_cart')
+    else:
+        return HttpResponse("Login to update your cart")
+
+
 def view_cart(request):
     if request.user.is_authenticated:
-        tcp = CartProduct.objects.filter(cart__user=request.user, cart__completed=False).count()
+        tcp = CartProduct.objects.filter(cart__user=request.user, cart__completed=False, product__visible=True).count()
         if tcp > 0:
             cart = Cart.objects.filter(completed=False, user=request.user).last()
             cart_products = CartProduct.objects.filter(cart=cart)
