@@ -21,8 +21,9 @@ class UserAddress(models.Model):
     pincode = models.CharField(max_length=6)
     house_no = models.CharField(max_length=30, help_text='House/Flat no. and building name')
     address = models.CharField(max_length=50, help_text='Area, Colony, Street, Sector, Village')
-    landmark = models.CharField(max_length=50, blank=True)
+    landmark = models.CharField(max_length=30, blank=True)
     city = models.CharField(max_length=30)
+    default_address = models.BooleanField(default=False)
     added_on = models.DateTimeField(auto_now_add=True)
     updated_on = models.DateTimeField(auto_now=True)
 
