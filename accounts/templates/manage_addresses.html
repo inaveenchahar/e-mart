@@ -1,0 +1,80 @@
+{% extends 'base.html' %}
+ {% load static %}
+{% block title %} Product Detail {% endblock title %}
+
+{% block content %}
+
+    <section>
+        {% if message.success %}
+            <div class="alert alert-success alert-dismissible">
+                <button type="button" class="close" data-dismiss="alert">&times;</button>
+                {{ message }}
+            </div>
+        {% endif %}
+        <div class="container py-md-5">
+            <div class="clearfix">
+                {% if all_addresses.count < 6 %}
+                    <button type="button" class="btn btn-success float-md-right" data-toggle="modal" data-target="#myModal">Add New Address</button>
+                    <!-- The Modal -->
+                    <div class="modal fade" id="myModal">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+
+                                <!-- Modal Header -->
+                                <div class="modal-header">
+                                    <h4 class="modal-title w-100 text-center">Add New Address</h4>
+                                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                </div>
+
+                                <!-- Modal body -->
+                                <div class="modal-body">
+                                    <form method="POST" action="{% url 'accounts:manage_addresses' %}">
+                                        {% csrf_token %}
+                                        {{ address_form.as_p }}
+                                        <input type="submit" value="Add Address" class="btn btn-success">
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {% else %}
+                    <span class="float-md-right small">You can only add maximum 6 address.</span>
+                {% endif %}
+                <h2>Manage Your Addresses</h2>
+            </div>
+
+
+
+            <div class="row">
+                {% for address in all_addresses %}
+                    <div class="col-md-6">
+                        <div class="img-thumbnail p-2 my-3 clearfix">
+                            <div>
+                                {% if address.default_address == True %}
+                                    <span class="badge badge-pill badge-warning float-md-right">Default</span>
+                                {% else %}
+                                    <a href="{% url 'accounts:default_address' address.id %}" class="float-md-right">Set Default</a>
+                                {% endif %}
+                                <span class="d-block font-weight-bold">{{ address.full_name }}</span>
+                                <span class="d-block ">{{ address.phone_no }}</span>
+                                <span class="d-block">{{ address.house_no }}, {{ address.address }}</span>
+                                {% if address.landmark %}
+                                    <span class="d-block">near {{ address.landmark }}</span>
+                                {% endif %}
+                                <span class="font-weight-bold">{{ address.city }} {{ address.pincode }}</span>
+                                <a href="{% url 'accounts:delete_address' address.id %}" class="float-md-right mx-2 btn btn-danger">
+                                    <i class="fa fa-trash-o my-0 text-white" aria-hidden="true"></i>
+                                </a>
+                                <a href="{% url 'accounts:update_address' address.id %}" class="float-md-right mx-2 btn btn-primary">
+                                    <i class="fa fa-pencil my-0 text-white" aria-hidden="true"></i>
+                                </a>
+                            </div>
+
+
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </section>
+{% endblock content %}

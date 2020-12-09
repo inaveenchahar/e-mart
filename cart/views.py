@@ -1,5 +1,7 @@
 from django.shortcuts import render, get_object_or_404, redirect, HttpResponse
 from .models import Cart, CartProduct
+from accounts.models import UserAddress
+from accounts.forms import UserAddressForm
 from products.models import Category, Product
 from django.contrib import messages
 from django.db.models import Count
@@ -59,6 +61,7 @@ def update_cart(request):
 def view_cart(request):
     if request.user.is_authenticated:
         tcp = CartProduct.objects.filter(cart__user=request.user, cart__completed=False, product__visible=True).count()
+
         if tcp > 0:
             cart = Cart.objects.filter(completed=False, user=request.user).last()
             cart_products = CartProduct.objects.filter(cart=cart)
@@ -67,7 +70,12 @@ def view_cart(request):
                 total = total + (item.quantity * item.product.price)
             cart.cart_value = total
             cart.save()
-            return render(request, 'view_cart.html', {'cart': cart, 'cart_products': cart_products, 'tcp': tcp, 'total': total})
+            ud_address = UserAddress.objects.filter(user=request.user, default_address=True).last()
+
+            address_form = UserAddressForm(request.POST or None)
+            if UserAddress.objects.filter(user=request.user).count() > 6:
+                address_form = None
+            return render(request, 'view_cart.html', {'cart': cart, 'cart_products': cart_products, 'tcp': tcp, 'total': total, 'ud_address': ud_address, 'address_form': address_form})
         else:
             empty_cart_message = 'Your cart is empty. Add products to it.'
             return render(request, 'view_cart.html', {'empty_cart_message': empty_cart_message, 'tcp': tcp})
