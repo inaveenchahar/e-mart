@@ -16,7 +16,12 @@ class UserProfile(models.Model):
 
 class UserAddress(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    address = models.CharField(max_length=30)
+    full_name = models.CharField(max_length=50)
+    phone_no = models.CharField(max_length=10)
+    pincode = models.CharField(max_length=6)
+    house_no = models.CharField(max_length=30, help_text='House/Flat no. and building name')
+    address = models.CharField(max_length=50, help_text='Area, Colony, Street, Sector, Village')
+    landmark = models.CharField(max_length=50, blank=True)
     city = models.CharField(max_length=30)
     added_on = models.DateTimeField(auto_now_add=True)
     updated_on = models.DateTimeField(auto_now=True)

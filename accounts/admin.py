@@ -6,4 +6,8 @@ from .models import UserProfile, UserAddress
 admin.site.register(UserProfile)
 
 
-admin.site.register(UserAddress)
+class UserAddressAdmin(admin.ModelAdmin):
+    list_display = ['user', 'full_name', 'phone_no', 'pincode', 'added_on', 'updated_on']
+
+
+admin.site.register(UserAddress, UserAddressAdmin)
