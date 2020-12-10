@@ -79,9 +79,10 @@ def delete_address(request, id):
         address = get_object_or_404(UserAddress, id=id)
         address.delete()
         if UserAddress.objects.filter(user=request.user):
-            address = UserAddress.objects.get(user=request.user)
-            address.default_address = True
-            address.save()
+            if not UserAddress.objects.filter(user=request.user, default_address=True).count() > 0:
+                address = UserAddress.objects.filter(user=request.user).last()
+                address.default_address = True
+                address.save()
         return redirect('accounts:manage_addresses')
     else:
         return redirect('main:homepage')

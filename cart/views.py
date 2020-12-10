@@ -73,7 +73,7 @@ def view_cart(request):
             ud_address = UserAddress.objects.filter(user=request.user, default_address=True).last()
 
             address_form = UserAddressForm(request.POST or None)
-            if UserAddress.objects.filter(user=request.user).count() > 6:
+            if UserAddress.objects.filter(user=request.user).count() >= 6:
                 address_form = None
             return render(request, 'view_cart.html', {'cart': cart, 'cart_products': cart_products, 'tcp': tcp, 'total': total, 'ud_address': ud_address, 'address_form': address_form})
         else:
