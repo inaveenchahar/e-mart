@@ -115,6 +115,4 @@ def update_address(request, id):
         return render(request, 'update_address.html', {'address': address, 'update_adForm': update_adForm, 'tcp': tcp})
     else:
         return redirect('main:homepage')
-
-
-
+    
