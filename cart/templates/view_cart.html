@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
  {% load static %}
-{% block title %} Homepage {% endblock title %}
+{% block title %} View Cart {% endblock title %}
 
 {% block content %}
 
@@ -16,80 +16,37 @@
         {% else %}
             <div class="container py-md-5">
                 <div class="row">
-                    <div class="col-md-6">
+                    <div class="col-md-8">
                         <h2>Cart Items</h2>
                         <div class="py-md-2">
-                                {% for product in cart_products %}
-                                    <div class="row">
-                                        <div class="col-md-3">
-                                            <img alt="product image" src="{{ product.product.image.url }}" class="embed-responsive">
-                                        </div>
-                                        <div class="col-md-9">
-                                            <h4>{{ product.product.title }}</h4>
-                                            <form method="POST" action="{% url 'cart:update_cart' %}">
-                                                {% csrf_token %}
-                                                <input type="hidden" name="product" value="{{ product.id }}">
-                                                <p>
-                                                    <label for="#quantity">Quantity</label>
-                                                    <input type="number" min="0" id="#quantity" value="{{ product.quantity }}" name="p_quantity">
-                                                    x {{ product.product.price | floatformat:"0" }}
-                                                </p>
-                                                <input type="submit" class="btn btn-warning" value="update">
-                                            </form>
-                                        </div>
+                            {% for product in cart_products %}
+                                <div class="row">
+                                    <div class="col-md-2">
+                                        <img alt="product image" src="{{ product.product.image.url }}" class="embed-responsive" style="height: 90px">
                                     </div>
-                                    <hr>
-                                {% endfor %}
-                            <div class="row">
-                                <div class="col-md-3">
-                                    <h3 class="font-weight-bold">Total</h3>
-                                </div>
-                                <div class="col-md-9">
-                                    <h3>{{ total }}</h3>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <h2 class="clearfix">
-                            Address
-                            {% if total_address < 6 %}
-                                <button type="button" class="btn btn-success float-md-right" data-toggle="modal" data-target="#myModal">Add New Address</button>
-                            {% endif %}
-                            <a href="{% url 'accounts:manage_addresses' %}" class="btn btn-primary float-md-right mx-2">Manage Address</a>
-                        </h2>
-                        <!-- The Modal -->
-                        <div class="modal fade" id="myModal">
-                            <div class="modal-dialog">
-                                <div class="modal-content">
-
-                                    <!-- Modal Header -->
-                                    <div class="modal-header">
-                                        <h4 class="modal-title w-100 text-center">Add New Address</h4>
-                                        <button type="button" class="close" data-dismiss="modal">&times;</button>
-                                    </div>
-
-                                    <!-- Modal body -->
-                                    <div class="modal-body">
-                                        <form method="POST" action="{% url 'accounts:manage_addresses' %}">
+                                    <div class="col-md-10">
+                                        <h4>{{ product.product.title }}</h4>
+                                        <form method="POST" action="{% url 'cart:update_cart' %}">
                                             {% csrf_token %}
-                                            {{ address_form.as_p }}
-                                            <input type="submit" value="Add Address" class="btn btn-success">
+                                            <input type="hidden" name="product" value="{{ product.id }}">
+                                            <p>
+                                                <label for="#quantity">Quantity</label>
+                                                <input type="number" min="0" id="#quantity" value="{{ product.quantity }}" name="p_quantity">
+                                                x {{ product.product.price | floatformat:"0" }}
+                                            </p>
+                                            <input type="submit" class="btn btn-warning" value="update">
                                         </form>
                                     </div>
                                 </div>
-                            </div>
+                                <hr>
+                            {% endfor %}
                         </div>
-
-                        {% if ud_address %}
-                            <div class="img-thumbnail p-2 my-3">
-                                <span class="d-block font-weight-bold">{{ ud_address.full_name }}</span>
-                                <span class="d-block ">{{ ud_address.phone_no }}</span>
-                                <span class="d-block ">{{ ud_address.house_no }}, {{ ud_address.address }}, near {{ ud_address.landmark }}</span>
-                                <span class="d-block font-weight-bold">{{ ud_address.city }} {{ ud_address.pincode }}</span>
-                            </div>
-                        {% endif %}
-                        <button class="btn btn-warning btn-block py-2">Buy Now</button>
+                    </div>
+                    <div class="col-md-4">
+                        <h2 class="">Price Details</h2>
+                        <h3 class="font-weight-bold">Total - {{ cart.cart_value }}</h3>
+                        <h3 class="font-weight-bold">Delivery Charges - Free</h3>
+                        <a href="{% url 'cart:order_create' cart.id %}" class="btn btn-warning btn-block py-2">Create Order</a>
                     </div>
                 </div>
             </div>
