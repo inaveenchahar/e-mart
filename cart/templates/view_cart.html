@@ -46,7 +46,7 @@
                         <h2 class="">Price Details</h2>
                         <h3 class="font-weight-bold">Total - {{ cart.cart_value }}</h3>
                         <h3 class="font-weight-bold">Delivery Charges - Free</h3>
-                        <a href="{% url 'cart:order_create' cart.id %}" class="btn btn-warning btn-block py-2">Create Order</a>
+                        <a href="{% url 'payment:order_create' cart.id %}" class="btn btn-warning btn-block py-2">Create Order</a>
                     </div>
                 </div>
             </div>

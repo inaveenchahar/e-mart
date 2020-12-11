@@ -90,7 +90,7 @@
                             </div>
                         {% endif %}
 {#                        <button class="btn btn-warning btn-block py-2">Buy Now</button>#}
-                        <form action="{% url 'cart:transaction_view' cart.id order.order_id %}" method="POST">
+                        <form action="{% url 'payment:transaction_view' cart.id order.order_id %}" method="POST">
                         <script src="https://checkout.razorpay.com/v1/checkout.js"
                             data-key={{ auth_key }}
                             data-amount="{{ order.order_amount }}"
