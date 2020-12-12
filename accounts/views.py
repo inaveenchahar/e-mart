@@ -67,7 +67,7 @@ def manage_addresses(request):
                 return redirect('accounts:manage_addresses')
         else:
             address_form = UserAddressForm()
-        if all_addresses.count() > 6:
+        if all_addresses.count() > 4:
             address_form = None
         return render(request, 'manage_addresses.html', {'all_addresses': all_addresses, 'address_form': address_form, 'tcp': tcp})
     else:

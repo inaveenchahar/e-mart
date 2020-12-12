@@ -16,47 +16,12 @@
         {% else %}
             <div class="container py-md-5">
                 <div class="row">
-                    <div class="col-md-6">
-                        <h2>Cart Items</h2>
-                        <div class="py-md-2">
-                                {% for product in cart_products %}
-                                    <div class="row">
-                                        <div class="col-md-3">
-                                            <img alt="product image" src="{{ product.product.image.url }}" class="embed-responsive">
-                                        </div>
-                                        <div class="col-md-9">
-                                            <h4>{{ product.product.title }}</h4>
-                                            <form method="POST" action="{% url 'cart:update_cart' %}">
-                                                {% csrf_token %}
-                                                <input type="hidden" name="product" value="{{ product.id }}">
-                                                <p>
-                                                    <label for="#quantity">Quantity</label>
-                                                    <input type="number" min="0" id="#quantity" value="{{ product.quantity }}" name="p_quantity">
-                                                    x {{ product.product.price | floatformat:"0" }}
-                                                </p>
-                                                <input type="submit" class="btn btn-warning" value="update">
-                                            </form>
-                                        </div>
-                                    </div>
-                                    <hr>
-                                {% endfor %}
-                            <div class="row">
-                                <div class="col-md-3">
-                                    <h3 class="font-weight-bold">Total</h3>
-                                </div>
-                                <div class="col-md-9">
-                                    <h3>{{ cart.cart_value }}</h3>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-6">
+                    <div class="col-md-7">
                         <h2 class="clearfix">
-                            Address
-                            {% if total_address < 6 %}
+                            Delivery Addresses
+                            {% if total_address.count < 6 %}
                                 <button type="button" class="btn btn-success float-md-right" data-toggle="modal" data-target="#myModal">Add New Address</button>
                             {% endif %}
-                            <a href="{% url 'accounts:manage_addresses' %}" class="btn btn-primary float-md-right mx-2">Manage Address</a>
                         </h2>
                         <!-- The Modal -->
                         <div class="modal fade" id="myModal">
@@ -71,46 +36,161 @@
 
                                     <!-- Modal body -->
                                     <div class="modal-body">
-                                        <form method="POST" action="{% url 'accounts:manage_addresses' %}">
+                                        <form method="POST" action="{% url 'payment:order_view' cart.id order.order_id %}">
                                             {% csrf_token %}
                                             {{ address_form.as_p }}
-                                            <input type="submit" value="Add Address" class="btn btn-success">
+                                            <input type="submit" value="Save And Deliver Here" class="btn btn-success">
                                         </form>
                                     </div>
                                 </div>
                             </div>
                         </div>
 
-                        {% if ud_address %}
-                            <div class="img-thumbnail p-2 my-3">
-                                <span class="d-block font-weight-bold">{{ ud_address.full_name }}</span>
-                                <span class="d-block ">{{ ud_address.phone_no }}</span>
-                                <span class="d-block ">{{ ud_address.house_no }}, {{ ud_address.address }}, near {{ ud_address.landmark }}</span>
-                                <span class="d-block font-weight-bold">{{ ud_address.city }} {{ ud_address.pincode }}</span>
+                        {% for address in total_address %}
+                            <div class="img-thumbnail p-3 my-3">
+                                {% if address.default_address is True %}
+                                    <span class="badge-pill badge-warning float-md-right px-2">Default</span>
+                                {% else %}
+                                    <a href="{% url 'payment:payment_default_address' cart.id order.order_id address.id %}">
+                                        <span class="badge-pill badge-light float-md-right px-2">Select</span>
+                                    </a>
+                                {% endif %}
+                                <span class="d-block font-weight-bold">{{ address.full_name }} | {{ address.phone_no }}</span>
+                                <span class="d-block ">{{ address.house_no }}, {{ address.address }} near {{ address.landmark }}</span>
+                                <span class="d-block font-weight-bold">{{ address.city }} - {{ address.pincode }}</span>
                             </div>
-                        {% endif %}
-{#                        <button class="btn btn-warning btn-block py-2">Buy Now</button>#}
+                        {% endfor %}
+                    </div>
+                    <div class="col-md-4 offset-md-1">
+                        <h2>Price Details</h2>
+                        <div class="img-thumbnail">
+
+                            <p>Price ({{ cart_products.count }} item) - {{ cart.cart_value }}</p>
+                            <p>Delivery Charges - Free</p>
+                            <p>Total Amount - {{ cart.cart_value }}</p>
+                        </div>
                         <form action="{% url 'payment:transaction_view' cart.id order.order_id %}" method="POST">
-                        <script src="https://checkout.razorpay.com/v1/checkout.js"
-                            data-key={{ auth_key }}
-                            data-amount="{{ order.order_amount }}"
-                            data-currency="INR"
-                            data-name="E-Mart"
-                            data-order_id='{{ order.order_id }}'
-                            data-description="Cart payment"
-{#                            data-image="{% static 'img/logo/SerefeLogo_2.png' %}"#}
-                            data-netbanking="true"
-{#                            data-description="Online Coaching and Counselling"#}
-                            data-prefill.name="{{ user.username }}"
-                            data-prefill.email="{{ user.email }}"
-                            data-prefill.contact="+91"
-                            data-theme.color="#f0ad4e"
-                        ></script>
-                        <input type="hidden" class="btn btn-lg " custom = "Hidden Element" name="hidden">
-                    </form>
+                            <script src="https://checkout.razorpay.com/v1/checkout.js"
+                                data-key={{ auth_key }}
+                                data-amount="{{ order.order_amount }}"
+                                data-currency="INR"
+                                data-name="E-Mart"
+                                data-order_id='{{ order.order_id }}'
+                                data-description="Cart payment"
+{#                                data-image="{% static 'img/logo/SerefeLogo_2.png' %}"#}
+                                data-netbanking="true"
+                                data-prefill.name="{{ user.username }}"
+                                data-prefill.email="{{ user.email }}"
+                                data-prefill.contact="+91"
+                                data-theme.color="#f0ad4e"
+                            ></script>
+                            <input type="hidden" class="btn btn-lg" custom="Hidden Element" name="hidden">
+                        </form>
                     </div>
                 </div>
             </div>
         {% endif %}
     </section>
+
+
+    <script>
+        var razor_btn = document.getElementsByClassName('razorpay-payment-button')[0];
+        razor_btn.classList.add('btn-warning', 'btn', 'my-4', 'btn-block');
+    </script>
+
 {% endblock content %}
+
+
+
+{##}
+{#                    <div class="col-md-6">#}
+{#                        <h2>Cart Items</h2>#}
+{#                        <div class="py-md-2">#}
+{#                                {% for product in cart_products %}#}
+{#                                    <div class="row">#}
+{#                                        <div class="col-md-3">#}
+{#                                            <img alt="product image" src="{{ product.product.image.url }}" class="embed-responsive">#}
+{#                                        </div>#}
+{#                                        <div class="col-md-9">#}
+{#                                            <h4>{{ product.product.title }}</h4>#}
+{#                                            <form method="POST" action="{% url 'cart:update_cart' %}">#}
+{#                                                {% csrf_token %}#}
+{#                                                <input type="hidden" name="product" value="{{ product.id }}">#}
+{#                                                <p>#}
+{#                                                    <label for="#quantity">Quantity</label>#}
+{#                                                    <input type="number" min="0" id="#quantity" value="{{ product.quantity }}" name="p_quantity">#}
+{#                                                    x {{ product.product.price | floatformat:"0" }}#}
+{#                                                </p>#}
+{#                                                <input type="submit" class="btn btn-warning" value="update">#}
+{#                                            </form>#}
+{#                                        </div>#}
+{#                                    </div>#}
+{#                                    <hr>#}
+{#                                {% endfor %}#}
+{#                            <div class="row">#}
+{#                                <div class="col-md-3">#}
+{#                                    <h3 class="font-weight-bold">Total</h3>#}
+{#                                </div>#}
+{#                                <div class="col-md-9">#}
+{#                                    <h3>{{ cart.cart_value }}</h3>#}
+{#                                </div>#}
+{#                            </div>#}
+{#                        </div>#}
+{#                    </div>#}
+{#                    <div class="col-md-6">#}
+{#                        <h2 class="clearfix">#}
+{#                            Address#}
+{#                            {% if total_address < 6 %}#}
+{#                                <button type="button" class="btn btn-success float-md-right" data-toggle="modal" data-target="#myModal">Add New Address</button>#}
+{#                            {% endif %}#}
+{#                            <a href="{% url 'accounts:manage_addresses' %}" class="btn btn-primary float-md-right mx-2">Manage Address</a>#}
+{#                        </h2>#}
+{#                        <!-- The Modal -->#}
+{#                        <div class="modal fade" id="myModal">#}
+{#                            <div class="modal-dialog">#}
+{#                                <div class="modal-content">#}
+{##}
+{#                                    <!-- Modal Header -->#}
+{#                                    <div class="modal-header">#}
+{#                                        <h4 class="modal-title w-100 text-center">Add New Address</h4>#}
+{#                                        <button type="button" class="close" data-dismiss="modal">&times;</button>#}
+{#                                    </div>#}
+{##}
+{#                                    <!-- Modal body -->#}
+{#                                    <div class="modal-body">#}
+{#                                        <form method="POST" action="{% url 'accounts:manage_addresses' %}">#}
+{#                                            {% csrf_token %}#}
+{#                                            {{ address_form.as_p }}#}
+{#                                            <input type="submit" value="Add Address" class="btn btn-success">#}
+{#                                        </form>#}
+{#                                    </div>#}
+{#                                </div>#}
+{#                            </div>#}
+{#                        </div>#}
+{##}
+{#                        {% if ud_address %}#}
+{#                            <div class="img-thumbnail p-2 my-3">#}
+{#                                <span class="d-block font-weight-bold">{{ ud_address.full_name }}</span>#}
+{#                                <span class="d-block ">{{ ud_address.phone_no }}</span>#}
+{#                                <span class="d-block ">{{ ud_address.house_no }}, {{ ud_address.address }}, near {{ ud_address.landmark }}</span>#}
+{#                                <span class="d-block font-weight-bold">{{ ud_address.city }} {{ ud_address.pincode }}</span>#}
+{#                            </div>#}
+{#                        {% endif %}#}
+{#                        <form action="{% url 'payment:transaction_view' cart.id order.order_id %}" method="POST">#}
+{#                        <script src="https://checkout.razorpay.com/v1/checkout.js"#}
+{#                            data-key={{ auth_key }}#}
+{#                            data-amount="{{ order.order_amount }}"#}
+{#                            data-currency="INR"#}
+{#                            data-name="E-Mart"#}
+{#                            data-order_id='{{ order.order_id }}'#}
+{#                            data-description="Cart payment"#}
+{#                            data-image="{% static 'img/logo/SerefeLogo_2.png' %}"#}
+{#                            data-netbanking="true"#}
+{#                            data-prefill.name="{{ user.username }}"#}
+{#                            data-prefill.email="{{ user.email }}"#}
+{#                            data-prefill.contact="+91"#}
+{#                            data-theme.color="#f0ad4e"#}
+{#                        ></script>#}
+{#                        <input type="hidden" class="btn btn-lg" custom="Hidden Element" name="hidden">#}
+{#                    </form>#}
+{#                    </div>#}

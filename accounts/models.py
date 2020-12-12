@@ -28,7 +28,7 @@ class UserAddress(models.Model):
     updated_on = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return str(self.user)
+        return str(self.user) + ' - ' + str(self.full_name)
 
     class Meta:
         verbose_name = 'User Address'

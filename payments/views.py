@@ -26,19 +26,31 @@ def order_create(request, id):
             order_id=order_id,
             order_amount=order_amount,
         )
-        return redirect('payment:order_view', cart.id, new_order.id)
+        return redirect('payment:order_view', cart.id, new_order.order_id)
     return redirect('main:homepage')
 
 
 def order_view(request, cart_id, order_id):
     if request.user.is_authenticated:
         cart = get_object_or_404(Cart, id=cart_id, user=request.user)
-        order = get_object_or_404(Order, id=order_id)
+        order = get_object_or_404(Order, order_id=order_id)
         cart_products = CartProduct.objects.filter(cart=cart)
         ud_address = UserAddress.objects.filter(user=request.user, default_address=True).last()
-        address_form = UserAddressForm(request.POST or None)
-        total_address = UserAddress.objects.filter(user=request.user).count()
-        if total_address >= 6:
+        if request.method == "POST":
+            address_form = UserAddressForm(request.POST)
+            if address_form.is_valid():
+                for adres in UserAddress.objects.filter(user=request.user):
+                    adres.default_address = False
+                    adres.save()
+                instance = address_form.save(commit=False)
+                instance.default_address = True
+                instance.user = request.user
+                instance.save()
+                return redirect('payment:order_view', cart.id, order.order_id)
+        else:
+            address_form = UserAddressForm()
+        total_address = UserAddress.objects.filter(user=request.user).order_by('-default_address')
+        if total_address.count() >= 4:
             address_form = None
         return render(request, 'order_view.html', {'cart': cart,
                                                    'cart_products': cart_products,
@@ -50,6 +62,20 @@ def order_view(request, cart_id, order_id):
                                                    })
     else:
         return redirect('main:homepage')
+
+
+def payment_default_address(request, cart_id, order_id, id):
+    if request.user.is_authenticated:
+        cart = get_object_or_404(Cart, id=cart_id, user=request.user)
+        order = get_object_or_404(Order, order_id=order_id)
+        for adres in UserAddress.objects.filter(user=request.user):
+            adres.default_address = False
+            adres.save()
+        address = get_object_or_404(UserAddress, id=id)
+        address.default_address = True
+        address.save()
+        return redirect('payment:order_view', cart.id, order.order_id)
+
 
 @csrf_exempt
 def transaction_view(request, cart_id, order_id):
@@ -71,6 +97,7 @@ def transaction_view(request, cart_id, order_id):
                 '''
                 client.utility.verify_payment_signature(params_dict)
                 order.completed = True
+                order.address = UserAddress.objects.filter(user=request.user, default_address=True).last()
                 order.save()
                 cart.completed = True
                 cart.save()
@@ -86,6 +113,7 @@ def transaction_view(request, cart_id, order_id):
                 messages.success(request, 'order successfully placed')
                 return redirect('main:homepage')
             except Exception as e:
-                return HttpResponse('Payment Signature Mismatch')
+                messages.error(request, 'We are facing some issue kindly try again after some time')
+                return redirect('cart:view_cart', cart.id)
     else:
         return redirect('main:homepage')
