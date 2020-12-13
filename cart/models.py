@@ -7,6 +7,9 @@ from products.models import Product
 class Cart(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     completed = models.BooleanField(default=False)
+    ordered_on = models.DateTimeField(null=True, blank=True)
+    delivered = models.BooleanField(default=False)
+    delivered_on = models.DateField(blank=True, null=True)
     cart_value = models.FloatField(default=0)
     added_on = models.DateTimeField(auto_now_add=True)
     updated_on = models.DateTimeField(auto_now=True)

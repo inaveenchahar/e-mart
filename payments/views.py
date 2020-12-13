@@ -7,11 +7,20 @@ from django.contrib import messages
 from django.views.decorators.csrf import csrf_exempt
 from django.conf import settings
 import razorpay
+import datetime
 
 # Create your views here.
 
 
-# def order_view1(request)
+def order_index(request):
+    if request.user.is_authenticated:
+        all_completed_carts = Cart.objects.filter(user=request.user, completed=True)
+        # all_cart_products = all_completed_carts.cartproduct_set.all()
+        # print(all_cart_products)
+        all_orders = Order.objects.filter(order_by=request.user, completed=True).order_by('-added_on')
+        return render(request, 'order_index.html', {'all_orders': all_orders, 'all_completed_carts': all_completed_carts})
+    else:
+        return redirect('main:homepage')
 
 
 def order_create(request, id):
@@ -49,7 +58,7 @@ def order_payment(request, cart_id, order_id):
                 instance.default_address = True
                 instance.user = request.user
                 instance.save()
-                return redirect('payment:order_view', cart.id, order.order_id)
+                return redirect('payment:order_payment', cart.id, order.order_id)
         else:
             address_form = UserAddressForm()
         total_address = UserAddress.objects.filter(user=request.user).order_by('-default_address')
@@ -77,7 +86,7 @@ def payment_default_address(request, cart_id, order_id, id):
         address = get_object_or_404(UserAddress, id=id)
         address.default_address = True
         address.save()
-        return redirect('payment:order_view', cart.id, order.order_id)
+        return redirect('payment:order_payment', cart.id, order.order_id)
 
 
 @csrf_exempt
@@ -103,7 +112,9 @@ def transaction_view(request, cart_id, order_id):
                 order.address = UserAddress.objects.filter(user=request.user, default_address=True).last()
                 order.save()
                 cart.completed = True
+                cart.ordered_on = datetime.datetime.now()
                 cart.save()
+                cart_products = CartProduct.objects.filter(cart=cart)
                 payment = Payment.objects.create(
                     order=order,
                     transaction_id=payment_id,
@@ -117,6 +128,6 @@ def transaction_view(request, cart_id, order_id):
                 return redirect('main:homepage')
             except Exception as e:
                 messages.error(request, 'We are facing some issue kindly try again after some time')
-                return redirect('cart:view_cart', cart.id)
+                return redirect('cart:view_cart')
     else:
         return redirect('main:homepage')

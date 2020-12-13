@@ -36,7 +36,7 @@
 
                                     <!-- Modal body -->
                                     <div class="modal-body">
-                                        <form method="POST" action="{% url 'payment:order_view' cart.id order.order_id %}">
+                                        <form method="POST" action="{% url 'payment:order_payment' cart.id order.order_id %}">
                                             {% csrf_token %}
                                             {{ address_form.as_p }}
                                             <input type="submit" value="Save And Deliver Here" class="btn btn-success">
@@ -69,23 +69,27 @@
                             <p>Delivery Charges - Free</p>
                             <p>Total Amount - {{ cart.cart_value }}</p>
                         </div>
-                        <form action="{% url 'payment:transaction_view' cart.id order.order_id %}" method="POST">
-                            <script src="https://checkout.razorpay.com/v1/checkout.js"
-                                data-key={{ auth_key }}
-                                data-amount="{{ order.order_amount }}"
-                                data-currency="INR"
-                                data-name="E-Mart"
-                                data-order_id='{{ order.order_id }}'
-                                data-description="Cart payment"
-{#                                data-image="{% static 'img/logo/SerefeLogo_2.png' %}"#}
-                                data-netbanking="true"
-                                data-prefill.name="{{ user.username }}"
-                                data-prefill.email="{{ user.email }}"
-                                data-prefill.contact="+91"
-                                data-theme.color="#f0ad4e"
-                            ></script>
-                            <input type="hidden" class="btn btn-lg" custom="Hidden Element" name="hidden">
-                        </form>
+                        {% if ud_address %}
+                            <form action="{% url 'payment:transaction_view' cart.id order.order_id %}" method="POST">
+                                <script src="https://checkout.razorpay.com/v1/checkout.js"
+                                    data-key={{ auth_key }}
+                                    data-amount="{{ order.order_amount }}"
+                                    data-currency="INR"
+                                    data-name="E-Mart"
+                                    data-order_id='{{ order.order_id }}'
+                                    data-description="Cart payment"
+    {#                                data-image="{% static 'img/logo/SerefeLogo_2.png' %}"#}
+                                    data-netbanking="true"
+                                    data-prefill.name="{{ user.username }}"
+                                    data-prefill.email="{{ user.email }}"
+                                    data-prefill.contact="+91"
+                                    data-theme.color="#f0ad4e"
+                                ></script>
+                                <input type="hidden" class="btn btn-lg" custom="Hidden Element" name="hidden">
+                            </form>
+                        {% else %}
+                            <p>Add address to proceed.</p>
+                        {% endif %}
                     </div>
                 </div>
             </div>

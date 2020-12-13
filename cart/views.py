@@ -72,6 +72,8 @@ def view_cart(request):
             total = 0
             for item in cart_products:
                 total = total + (item.quantity * item.product.price)
+                item.price = item.product.price
+                item.save()
             cart.cart_value = total
             cart.save()
             return render(request, 'view_cart.html',{'cart': cart, 'cart_products': cart_products, 'tcp': tcp, 'total': total})

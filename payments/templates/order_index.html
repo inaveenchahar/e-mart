@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+ {% load static %}
+{% block title %} Order View {% endblock title %}
+
+{% block content %}
+
+    <section>
+        {% if message %}
+            <div class="alert {% if message.success %}alert-success{% elif message.error %}alert-danger{% endif %} alert-dismissible">
+                <button type="button" class="close" data-dismiss="alert">&times;</button>
+                {{ message }}
+            </div>
+        {% endif %}
+
+        <div class="container py-md-5">
+            <div class="row">
+                <div class="col-md-10 offset-md-1">
+                    <h1>Order History</h1>
+                    {% for cart in all_completed_carts %}
+                        {% for a in cart.cartproduct_set.all %}
+                            <div class="img-thumbnail py-4 my-3 bg-light">
+                                <div class="row mx-0">
+                                    <div class="col-md-2 text-center">
+                                        <img alt="{{ a.product.title }}" src="{{ a.product.image.url }}" style="height: 72px">
+                                    </div>
+                                    <div class="col-md-5 px-0">
+                                        <p class="font-weight-bold">{{ a.product.title }}</p>
+                                        <p class="text-muted">Quantity {{ a.quantity }}</p>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <p class="font-weight-bold">{{ a.price }}</p>
+                                    </div>
+                                    <div class="col-md-3">
+                                        {% if cart.delivered %}
+                                            <p class="text-success font-weight-bold">Delivered on <br> {{ cart.delivered_on }}</p>
+                                        {% else %}
+                                            <p class="font-weight-bold">Ordered on <br> {{ cart.ordered_on }}</p>
+                                        {% endif %}
+                                    </div>
+                                </div>
+
+                            </div>
+                        {% endfor %}
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock content %}
