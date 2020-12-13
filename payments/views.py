@@ -11,6 +11,9 @@ import razorpay
 # Create your views here.
 
 
+# def order_view1(request)
+
+
 def order_create(request, id):
     if request.user.is_authenticated:
         cart = get_object_or_404(Cart, id=id, user=request.user)
@@ -26,11 +29,11 @@ def order_create(request, id):
             order_id=order_id,
             order_amount=order_amount,
         )
-        return redirect('payment:order_view', cart.id, new_order.order_id)
+        return redirect('payment:order_payment', cart.id, new_order.order_id)
     return redirect('main:homepage')
 
 
-def order_view(request, cart_id, order_id):
+def order_payment(request, cart_id, order_id):
     if request.user.is_authenticated:
         cart = get_object_or_404(Cart, id=cart_id, user=request.user)
         order = get_object_or_404(Order, order_id=order_id)
@@ -52,7 +55,7 @@ def order_view(request, cart_id, order_id):
         total_address = UserAddress.objects.filter(user=request.user).order_by('-default_address')
         if total_address.count() >= 4:
             address_form = None
-        return render(request, 'order_view.html', {'cart': cart,
+        return render(request, 'order_payment.html', {'cart': cart,
                                                    'cart_products': cart_products,
                                                    'ud_address': ud_address,
                                                    'address_form': address_form,
