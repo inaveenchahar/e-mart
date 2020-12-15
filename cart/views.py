@@ -75,6 +75,10 @@ def view_cart(request):
                 item.price = item.product.price
                 item.save()
             cart.cart_value = total
+            if cart.cart_value > settings.CART_VALUE:
+                cart.delivery_charges = 0
+            else:
+                cart.delivery_charges = settings.DELIVERY_CHARGE
             cart.save()
             return render(request, 'view_cart.html',{'cart': cart, 'cart_products': cart_products, 'tcp': tcp, 'total': total})
         else:
