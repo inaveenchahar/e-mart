@@ -28,6 +28,7 @@ class Product(models.Model):
     slug = models.SlugField(max_length=100)
     image = models.ImageField(null=True, upload_to='images/product')
     price = models.FloatField(help_text='Product price')
+    buy_limit = models.IntegerField(default=4)
     order = models.IntegerField(blank=True, null=True, help_text='Display order')
     visible = models.BooleanField(default=True, help_text='Visible to users')
     highlight = models.BooleanField(default=False, help_text='To display product on homepage')

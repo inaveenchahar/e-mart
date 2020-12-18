@@ -15,11 +15,6 @@ from django.conf import settings
 def cart_product(request, c_slug, p_slug, id):
     category = get_object_or_404(Category, slug=c_slug)
     product = get_object_or_404(Product, slug=p_slug, id=id)
-    p_quantity = 1
-    if request.method == 'POST':
-        p_quantity = request.POST.get('p_quantity')
-        if int(p_quantity) < 1:
-            p_quantity = 1
     if request.user.is_authenticated:
         if Cart.objects.filter(completed=False, user=request.user):
             cart = Cart.objects.get(completed=False, user=request.user)
@@ -34,11 +29,82 @@ def cart_product(request, c_slug, p_slug, id):
                 price=product.price,
                 quantity=0
             )
-        c_product.quantity += int(p_quantity)
+        if c_product.quantity > product.buy_limit:
+            messages.warning(request, "You can only add maximum {quantity} of this product".format(quantity=product.buy_limit))
+            return redirect('product:product_details', category.slug, product.slug, product.id)
+        c_product.quantity += 1
         c_product.save()
         messages.success(request, "You have successfully added {prdt} in your cart.".format(prdt=product))
         return redirect('main:homepage')
     return render(request, 'product_details.html', {'category': category, 'product': product})
+
+
+# def cart_product(request, c_slug, p_slug, id):
+#     category = get_object_or_404(Category, slug=c_slug)
+#     product = get_object_or_404(Product, slug=p_slug, id=id)
+#     p_quantity = 1
+#     if request.method == 'POST':
+#         p_quantity = request.POST.get('p_quantity')
+#         if int(p_quantity) < 1:
+#             p_quantity = 1
+#     if request.user.is_authenticated:
+#         if Cart.objects.filter(completed=False, user=request.user):
+#             cart = Cart.objects.get(completed=False, user=request.user)
+#         else:
+#             cart = Cart.objects.create(user=request.user)
+#         if CartProduct.objects.filter(cart=cart, product=product):
+#             c_product = CartProduct.objects.get(cart=cart, product=product)
+#         else:
+#             c_product = CartProduct.objects.create(
+#                 cart=cart,
+#                 product=product,
+#                 price=product.price,
+#                 quantity=0
+#             )
+#         c_product.quantity += int(p_quantity)
+#         c_product.save()
+#         messages.success(request, "You have successfully added {prdt} in your cart.".format(prdt=product))
+#         return redirect('main:homepage')
+#     return render(request, 'product_details.html', {'category': category, 'product': product})
+
+
+def increase_quantity(request, cp_id):
+    if request.user.is_authenticated:
+        c_product = get_object_or_404(CartProduct, id=cp_id)
+        product = Product.objects.get(id=c_product.product.id)
+        if c_product.quantity >= product.buy_limit:
+            messages.warning(request, "You can only add maximum {quantity} of this product".format(quantity=product.buy_limit))
+            return redirect('cart:view_cart')
+        else:
+            c_product.quantity += 1
+            c_product.save()
+            return redirect('cart:view_cart')
+    else:
+        return HttpResponse("Login to update your cart")
+
+
+def decrease_quantity(request, cp_id):
+    if request.user.is_authenticated:
+        c_product = get_object_or_404(CartProduct, id=cp_id)
+        if c_product.quantity > 1:
+            c_product.quantity -= 1
+            c_product.save()
+            return redirect('cart:view_cart')
+        else:
+            messages.error(request, 'Quantity must be 1 or more than 1')
+            return redirect('cart:view_cart')
+    else:
+        return HttpResponse("Login to update your cart")
+
+
+def remove_cart_product(request, cp_id):
+    if request.user.is_authenticated:
+        c_product = get_object_or_404(CartProduct, id=cp_id)
+        c_product.delete()
+        return redirect('cart:view_cart')
+    else:
+        return redirect('main:homepage')
+
 
 
 def update_cart(request):

@@ -32,9 +32,16 @@ def product_details(request, c_slug, p_slug, id):
     category = get_object_or_404(Category, slug=c_slug)
     product = get_object_or_404(Product, slug=p_slug, id=id)
     tcp = 0
+    cart_product = None
+    already_exists = False
     if request.user.is_authenticated:
         """
             tcp = total cart products
         """
-        tcp = CartProduct.objects.filter(cart__user=request.user, cart__completed=False).count()
-    return render(request, 'product_details.html', {'category': category, 'product': product, 'tcp': tcp})
+        cart_product = CartProduct.objects.filter(cart__user=request.user, cart__completed=False)
+        for p in cart_product:
+            if p.product == product:
+                already_exists = True
+
+        tcp = cart_product.count()
+    return render(request, 'product_details.html', {'category': category, 'product': product, 'tcp': tcp, 'already_exists': already_exists})
