@@ -4,6 +4,7 @@
 
 {% block content %}
 
+    <link rel="stylesheet" type="text/css" href="{% static 'css/view_cart.css' %}">
     <section>
         {% if message.success %}
             <div class="alert alert-success alert-dismissible">
@@ -14,35 +15,25 @@
         {% if empty_cart_message %}
             <p>{{ empty_cart_message }}</p>
         {% else %}
-            <div class="container py-md-5">
+            <div class="container py-md-5 py-3">
                 <div class="row">
                     <div class="col-md-8">
                         <h2>Cart Items</h2>
                         <div class="py-md-2">
                             {% for product in cart_products %}
                                 <div class="row">
-                                    <div class="col-md-2">
+                                    <div class="col-lg-2 col-md-3 col-sm-4 col-4">
                                         <img alt="product image" src="{{ product.product.image.url }}" class="embed-responsive" style="height: 90px">
                                         <div class="my-2">
-                                            <a {% if product.quantity > 1 %} href="{% url 'cart:decrease_quantity' product.id %}" {% else %} href="" {% endif %}class="px-md-1 text-decoration-none text-dark"><i class="fa fa-minus-circle my-0" aria-hidden="true" style="font-size: 17px"></i></a>
-                                            <span class="d-inline-block border border-secondary px-md-2 mx-lg-2 mx-md-1" style="font-size: 14px">{{ product.quantity }}</span>
-                                            <a href="{% url 'cart:increase_quantity' product.id %}" class="px-md-1 text-decoration-none text-dark"><i class="fa fa-plus-circle my-0" aria-hidden="true" style="font-size: 17px"></i></a>
+                                            <a {% if product.quantity > 1 %} href="{% url 'cart:decrease_quantity' product.id %}" {% else %} href="" {% endif %}class="px-md-1 px-sm-2 text-decoration-none text-dark"><i class="fa fa-minus-circle my-0" aria-hidden="true" style="font-size: 17px"></i></a>
+                                            <span class="d-inline-block border border-secondary px-md-2 px-3 mx-lg-2 mx-1" style="font-size: 14px">{{ product.quantity }}</span>
+                                            <a href="{% url 'cart:increase_quantity' product.id %}" class="px-md-1 px-sm-2 text-decoration-none text-dark"><i class="fa fa-plus-circle my-0" aria-hidden="true" style="font-size: 17px"></i></a>
                                         </div>
                                     </div>
-                                    <div class="col-md-10">
+                                    <div class="col-lg-10 col-md-9 col-sm-8 col-8">
                                         <h4>{{ product.product.title }}</h4>
                                         <h3 class="font-weight-bold my-md-3"><i class="fa fa-inr my-0" aria-hidden="true"></i>{{ product.product.price | floatformat:"0" }}</h3>
                                         <a href="{% url 'cart:remove_cart_product' product.id %}" class="font-weight-bold text-dark text-decoration-none" style="font-size: 14px">REMOVE</a>
-{#                                        <form method="POST" action="{% url 'cart:update_cart' %}">#}
-{#                                            {% csrf_token %}#}
-{#                                            <input type="hidden" name="product" value="{{ product.id }}">#}
-{#                                            <p>#}
-{#                                                <label for="#quantity">Quantity</label>#}
-{#                                                <input type="number" min="0" id="#quantity" value="{{ product.quantity }}" name="p_quantity">#}
-{#                                                x {{ product.product.price | floatformat:"0" }}#}
-{#                                            </p>#}
-{#                                            <input type="submit" class="btn btn-warning" value="update">#}
-{#                                        </form>#}
                                     </div>
                                 </div>
                                 <hr>
@@ -50,10 +41,12 @@
                         </div>
                     </div>
                     <div class="col-md-4">
-                        <h2 class="">Price Details</h2>
-                        <h3 class="font-weight-bold">Total - {{ cart.cart_value }}</h3>
-                        <h3 class="font-weight-bold">Delivery Charges - {% if cart.delivery_charges == 0 %} Free {% else %} {{ cart.delivery_charges }}{% endif %}</h3>
-                        <a href="{% url 'payment:order_create' cart.id %}" class="btn btn-warning btn-block py-2">Create Order</a>
+                        <div class="bg-light p-3">
+                            <h2 class='pt-0 mt-0'>Price Details</h2>
+                            <p class="" style="font-size: 18px">Total  <span class="float-right" style="font-size: 18px">{{ cart.cart_value }}</span></p>
+                            <p class="" style="font-size: 18px">Delivery Charges <span class="float-right" style="font-size: 18px">{% if cart.delivery_charges == 0 %} Free {% else %} {{ cart.delivery_charges }}{% endif %}</span></p>
+                        </div>
+                        <a id="orderBtn" href="{% url 'payment:order_create' cart.id %}" class="btn btn-warning btn-block py-3 py-md-2 my-sm-3">Create Order</a>
                     </div>
                 </div>
             </div>

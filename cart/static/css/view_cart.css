@@ -1,0 +1,19 @@
+@media screen and (max-width: 575px){
+    #orderBtn{
+        font-size: small;
+        /*color: #fff !important;*/
+        text-transform: uppercase;
+        text-decoration: none;
+        /*background: #ed3330;*/
+        /*padding: 10px 0 10px 0;*/
+        border-radius: 0;
+        display: block;
+        border: none;
+        transition: all 0.4s ease 0s;
+        margin-top: 2em;
+        bottom: 0;
+        position: fixed;
+        width: 100%;
+        left: 0;
+    }
+}
