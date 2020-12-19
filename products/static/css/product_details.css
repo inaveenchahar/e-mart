@@ -1,0 +1,9 @@
+#pd_image{
+    height: 500px;
+}
+
+@media only screen and (max-width: 574px) {
+    #pd_image{
+        height: 370px;
+    }
+}
