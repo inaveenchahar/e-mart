@@ -5,15 +5,15 @@ from cart.models import CartProduct
 # Create your views here.
 
 
-def category_index(request):
-    all_categories = Category.objects.filter(visible=True).order_by('order')
-    tcp = 0
-    if request.user.is_authenticated:
-        """
-            tcp = total cart products
-        """
-        tcp = CartProduct.objects.filter(cart__user=request.user, cart__completed=False).count()
-    return render(request, 'category_index.html', {'all_categories': all_categories, 'tcp': tcp})
+# def category_index(request):
+#     all_categories = Category.objects.filter(visible=True).order_by('order')
+#     tcp = 0
+#     if request.user.is_authenticated:
+#         """
+#             tcp = total cart products
+#         """
+#         tcp = CartProduct.objects.filter(cart__user=request.user, cart__completed=False).count()
+#     return render(request, 'category_index.html', {'all_categories': all_categories, 'tcp': tcp})
 
 
 def category_details(request, c_slug):
