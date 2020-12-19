@@ -1,9 +1,10 @@
 {% extends 'base.html' %}
- {% load static %}
+
 {% block title %} All Products {% endblock title %}
 
 {% block content %}
-
+     {% load static %}
+    <link rel="stylesheet" type="text/css" href="{% static 'css/category_details.css' %}">
     <section>
         {% if message.success %}
             <div class="alert alert-success alert-dismissible">
@@ -11,14 +12,14 @@
                 {{ message }}
             </div>
         {% endif %}
-        <div class="container py-md-5">
-            <h1>{{ category }}</h1>
+        <div class="container py-md-5  py-3">
+            <h1 class="mb-md-3">{{ category }}</h1>
             <div class="row">
                 {% for product in all_products %}
-                    <div class="col-md-3">
+                    <div class="col-lg-3 col-md-4 col-sm-6 col-12">
                         <a href="{% url 'product:product_details' category.slug product.slug product.id %}">
-                            <div class="card border-0 mb-4">
-                                <img src="{{ product.image.url }}" class="card-img-top embed-responsive border" alt="product-image" style="height: 240px">
+                            <div class="card border-0 mb-4 px-2">
+                                <img id="p_image" src="{{ product.image.url }}" class="card-img-top embed-responsive border" alt="product-image">
                                 <div class="card-body py-2 px-2 text-center">
                                     <p class="card-title text-dark my-1 text-uppercase">{{ product.title }}</p>
                                 </div>
@@ -26,9 +27,7 @@
                                     <span class="lead" style="vertical-align: middle">
                                         <i class="fa fa-inr my-0" aria-hidden="true"></i> {{ product.price | floatformat:"0" }}
                                     </span>
-{#                                    <a href="{% url 'cart:cart_product' category.slug product.slug product.id %}" class="btn btn-primary float-right">Add to Cart</a>#}
                                 </div>
-
                             </div>
                         </a>
                     </div>

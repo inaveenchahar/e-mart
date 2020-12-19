@@ -11,24 +11,22 @@
                 {{ message }}
             </div>
         {% endif %}
-        <div class="container py-md-5">
-            <h1>Explore All Categories</h1>
+        <div class="container py-md-5 py-3">
+            <h2 class="mb-md-3">Explore All Categories</h2>
             <div class="row">
                 {% for category in all_categories %}
-                    <div class="col-md-4 mb-4">
+                    <div class="col-md-4 col-sm-6 col-12 mb-4">
                         <a href="{% url 'product:category_details' category.slug %}">
                             <div class="card">
                                 <img alt="product image" src="{{ category.image.url }}" class="card-img" style="height: 220px">
                                 <div class="card-body py-2">
-                                    <p class="card-title my-1 text-secondary">{{ category.title }}</p>
+                                    <p class="card-title my-1 text-secondary font-weight-bold">{{ category.title }}</p>
                                 </div>
                             </div>
                         </a>
                     </div>
                 {% endfor %}
             </div>
-
-
         </div>
     </section>
 {% endblock content %}
