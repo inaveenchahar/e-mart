@@ -1,8 +1,9 @@
 {% extends 'base.html' %}
  {% load static %}
-{% block title %} Order View {% endblock title %}
+{% block title %} Order Payment {% endblock title %}
 
 {% block content %}
+    <link rel="stylesheet" type="text/css" href="{% static 'order_payment.css' %}">
 
     <section>
         {% if message.success %}
@@ -14,13 +15,15 @@
         {% if empty_cart_message %}
             <p>{{ empty_cart_message }}</p>
         {% else %}
-            <div class="container py-md-5">
+            <div class="container py-md-5 py-3">
                 <div class="row">
                     <div class="col-md-7">
                         <h2 class="clearfix">
-                            Delivery Addresses
-                            {% if total_address.count < 6 %}
-                                <button type="button" class="btn btn-success float-md-right" data-toggle="modal" data-target="#myModal">Add New Address</button>
+                            Delivery Address
+                            {% if total_address.count < 4 %}
+                                <button type="button" class="btn btn-success float-right" data-toggle="modal" data-target="#myModal">
+                                    <i class="fa fa-plus my-0" aria-hidden="true"></i> New Address
+                                </button>
                             {% endif %}
                         </h2>
                         <!-- The Modal -->
@@ -63,11 +66,10 @@
                     </div>
                     <div class="col-md-4 offset-md-1">
                         <h2>Price Details</h2>
-                        <div class="img-thumbnail">
-
+                        <div class="img-thumbnail px-3 pt-3 pb-2">
                             <p>Price ({{ cart_products.count }} item) - {{ cart.cart_value }}</p>
                             <p>Delivery Charges - Free</p>
-                            <p>Total Amount - {{ cart.cart_value }}</p>
+                            <p class="">Total Amount - {{ cart.cart_value }}</p>
                         </div>
                         {% if ud_address %}
                             <form action="{% url 'payment:transaction_view' cart.id order.order_id %}" method="POST">
@@ -99,7 +101,7 @@
 
     <script>
         var razor_btn = document.getElementsByClassName('razorpay-payment-button')[0];
-        razor_btn.classList.add('btn-warning', 'btn', 'my-4', 'btn-block');
+        razor_btn.classList.add('btn-warning', 'btn', 'py-md-2', 'py-3', 'my-md-4');
     </script>
 
 {% endblock content %}
