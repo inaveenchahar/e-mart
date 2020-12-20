@@ -12,13 +12,13 @@ import datetime
 # Create your views here.
 
 
-def order_index(request):
+def order_history(request):
     if request.user.is_authenticated:
         all_completed_carts = Cart.objects.filter(user=request.user, completed=True)
         # all_cart_products = all_completed_carts.cartproduct_set.all()
         # print(all_cart_products)
         all_orders = Order.objects.filter(order_by=request.user, completed=True).order_by('-added_on')
-        return render(request, 'order_index.html', {'all_orders': all_orders, 'all_completed_carts': all_completed_carts})
+        return render(request, 'order_history.html', {'all_orders': all_orders, 'all_completed_carts': all_completed_carts})
     else:
         return redirect('main:homepage')
 
