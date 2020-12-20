@@ -10,45 +10,47 @@
 </head>
 <body style="padding: 0; margin: 0">
 
-    <nav class="navbar navbar-dark bg-dark navbar-expand-md">
+    <nav class="navbar navbar-dark bg-dark navbar-expand-md px-md-3">
         <a style="font-size: 24px" href="{% url 'main:homepage' %}" class="navbar-brand">WatchPool</a>
-        <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbarCollapse">
+
+        <a href="{% url 'cart:view_cart' %}" class="text-white d-md-none navbar-link">
+            <i class="fa fa-shopping-cart my-0" aria-hidden="true"></i>
+            <span class="badge badge-pill badge-light">{{ tcp }}</span>
+        </a>
+
+        <button type="button" class="navbar-toggler order-first" data-toggle="collapse" data-target="#navbarCollapse">
             <span class="navbar-toggler-icon"></span>
         </button>
+
         <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav">
                 <li class="nav-item ">
                     <a href="{% url 'main:homepage' %}" class="nav-link text-white">Home</a>
                 </li>
-{#                <li class="nav-item">#}
-{#                    <a href="{% url 'product:category_index' %}" class="nav-link text-white">All Categories</a>#}
-{#                </li>#}
-{#                <li class="nav-item">#}
-{#                    <a href="" class="nav-link text-white">Offers</a>#}
-{#                </li>#}
-
             </ul>
             <ul class="navbar-nav ml-auto">
                 {% if request.user.is_authenticated %}
+                    <li class="nav-item mr-md-3 d-none d-md-block">
+                        <a href="{% url 'cart:view_cart' %}" class="nav-link text-white">
+                            <i class="fa fa-shopping-cart my-0" aria-hidden="true"></i>
+                            <span class="badge badge-pill badge-light">{{ tcp }}</span>
+                        </a>
+                    </li>
                     <li class="nav-item">
-                        <div class="dropdown">
+                        <div class="dropdown ">
                             <a type="button" class="dropdown-toggle nav-link text-white" data-toggle="dropdown">
-                                Hi, {{ request.user.username }}
+                                Hi, <span class="text-uppercase">{{ request.user.username }}</span>
                             </a>
                             <div class="dropdown-menu py-0">
                                 <a class="dropdown-item py-2" href="#">Profile</a>
-                                <a class="dropdown-item py-2" href="{% url 'accounts:manage_addresses' %}">My addresses</a>
+                                <a class="dropdown-item py-2" href="{% url 'accounts:manage_addresses' %}">Manage Address</a>
                                 <a class="dropdown-item py-2" href="{% url 'payment:order_history' %}">Orders</a>
                                 <div class="dropdown-divider my-0"></div>
                                 <a class="dropdown-item py-2 text-danger" href="{% url 'accounts:logout' %}">Logout</a>
                             </div>
                         </div>
                     </li>
-                    <li class="nav-item mr-md-3">
-                        <a href="{% url 'cart:view_cart' %}" class="nav-link text-white">Cart
-                            <span class="badge badge-pill badge-light">{{ tcp }}</span>
-                        </a>
-                    </li>
+
 {#                     <li class="nav-item">#}
 {#                        <a href="{% url 'accounts:logout' %}" class="btn btn-danger text-white nav-link">Log Out</a>#}
 {#                    </li>#}
@@ -66,6 +68,7 @@
                     </li>
                 {% endif %}
             </ul>
+            <ul></ul>
         </div>
     </nav>
     {% if messages %}
