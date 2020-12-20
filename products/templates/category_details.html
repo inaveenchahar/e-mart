@@ -12,8 +12,8 @@
                 {{ message }}
             </div>
         {% endif %}
-        <div class="container py-md-5  py-3">
-            <h1 class="mb-md-3">{{ category }}</h1>
+        <div class="container py-md-5 py-3">
+            <h2 class="mb-md-3 text-uppercase">{{ category | upper }}</h2>
             <div class="row">
                 {% for product in all_products %}
                     <div class="col-lg-3 col-md-4 col-sm-6 col-12">
