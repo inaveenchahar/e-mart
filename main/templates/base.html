@@ -15,7 +15,9 @@
 
         <a href="{% url 'cart:view_cart' %}" class="text-white d-md-none navbar-link">
             <i class="fa fa-shopping-cart my-0" aria-hidden="true"></i>
-            <span class="badge badge-pill badge-light">{{ tcp }}</span>
+            {% if tcp > 0 %}
+                <span class="badge badge-pill badge-light">{{ tcp }}</span>
+            {% endif %}
         </a>
 
         <button type="button" class="navbar-toggler order-first" data-toggle="collapse" data-target="#navbarCollapse">
@@ -29,12 +31,17 @@
                 </li>
             </ul>
             <ul class="navbar-nav ml-auto">
-                {% if request.user.is_authenticated %}
-                    <li class="nav-item mr-md-3 d-none d-md-block">
-                        <a href="{% url 'cart:view_cart' %}" class="nav-link text-white">
-                            <i class="fa fa-shopping-cart my-0" aria-hidden="true"></i>
+                <li class="nav-item mr-md-2 d-none d-md-block">
+                    <a href="{% url 'cart:view_cart' %}" class="nav-link text-white">
+                        <i class="fa fa-shopping-cart my-0" aria-hidden="true"></i>
+                        {% if tcp > 0 %}
                             <span class="badge badge-pill badge-light">{{ tcp }}</span>
-                        </a>
+                        {% endif %}
+                    </a>
+                </li>
+                {% if request.user.is_authenticated %}
+                    <li class="nav-item">
+                        <a class="nav-link text-white" href="{% url 'payment:order_history' %}">Orders</a>
                     </li>
                     <li class="nav-item">
                         <div class="dropdown ">
@@ -55,11 +62,6 @@
 {#                        <a href="{% url 'accounts:logout' %}" class="btn btn-danger text-white nav-link">Log Out</a>#}
 {#                    </li>#}
                 {% else %}
-                    <li class="nav-item mr-md-3">
-                        <a href="{% url 'cart:view_cart' %}" class="nav-link text-white">Cart
-                            <span class="badge badge-pill badge-light">{{ tcp }}</span>
-                        </a>
-                    </li>
                     <li class="nav-item mr-md-2">
                         <a href="{% url 'accounts:login' %}" class="btn btn-light nav-link text-dark px-md-3">Login</a>
                     </li>
