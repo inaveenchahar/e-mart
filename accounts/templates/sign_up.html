@@ -17,7 +17,7 @@
                             {{ form.non_field_errors.as_ul }}
                         </span>
                     {% endif %}
-                    <div class="img-thumbnail p-md-4">
+                    <div class="img-thumbnail bg-light p-md-4 p-4">
                         <form method="POST" action="{% url 'accounts:sign_up' %}">
                             {% csrf_token %}
                             <p class="mb-3">{{ form.first_name }}</p>
