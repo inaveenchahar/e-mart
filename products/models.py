@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+from ckeditor.fields import RichTextField
 
 # Create your models here.
 
@@ -27,6 +28,7 @@ class Product(models.Model):
     title = models.CharField(max_length=100, help_text='Product name')
     slug = models.SlugField(max_length=100)
     image = models.ImageField(null=True, upload_to='images/product')
+    description = RichTextField(help_text='Product Description', blank=True)
     price = models.FloatField(help_text='Product price')
     buy_limit = models.IntegerField(default=4)
     order = models.IntegerField(blank=True, null=True, help_text='Display order')

@@ -23,9 +23,12 @@
                     {% if already_exists %}
                         <span class="text-success font-weight-bold px-md-3" style="font-size: 16px">Already added in cart</span>
                     {% endif %}
-                    <a href="{% url 'cart:cart_product' category.slug product.slug product.id %}" class="btn btn-warning my-0 py-3 px-5">
-                        <span style="font-size: 18px"> Buy Now</span>
+                    <a href="{% url 'cart:cart_product' category.slug product.slug product.id %}" class="btn btn-warning my-0 py-3 px-4">
+                        <span class="text-uppercase" style="font-size: 16px"> ADD TO CART</span>
                     </a>
+                    <div class="my-3">
+                        {{ product.description | safe }}
+                    </div>
                 </div>
             </div>
 
