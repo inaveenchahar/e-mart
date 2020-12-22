@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'cart',
     'payments',
     'main',
+    'seller',
     'ckeditor',
     'django.contrib.admin',
     'django.contrib.auth',
