@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{% block title %} {% endblock title %}</title>
+    {% load static %}
+    {% include 'style.html' %}
+
+</head>
+<body style="padding: 0; margin: 0">
+
+    <nav class="navbar navbar-dark bg-info navbar-expand-md px-md-3">
+        <a style="font-size: 24px" href="{% url 'main:homepage' %}" class="navbar-brand">WatchPool</a>
+
+        <button type="button" class="navbar-toggler order-first" data-toggle="collapse" data-target="#navbarCollapse">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav ml-auto">
+                {% if request.user.is_authenticated %}
+                    <li class="nav-item">
+                        <a class="nav-link text-white" href="{% url 'seller:dashboard' %}">
+                            <i class="fa fa-tachometer my-0" aria-hidden="true"></i> Dashboard</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-white" href="{% url 'seller:index_seller' %}">
+                            <i class="fa fa-list-alt my-0" aria-hidden="true"></i> Orders
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <div class="dropdown ">
+                            <a type="button" class="dropdown-toggle nav-link text-white" data-toggle="dropdown">
+                                Hi, <span class="text-uppercase">{{ request.user.username }}</span>
+                            </a>
+                            <div class="dropdown-menu py-0">
+                                <a class="dropdown-item py-2" href="#">Profile</a>
+                                <div class="dropdown-divider my-0"></div>
+                                <a class="dropdown-item py-2 text-danger" href="{% url 'accounts:logout' %}">Logout</a>
+                            </div>
+                        </div>
+                    </li>
+
+                {% else %}
+                    <li class="nav-item">
+                        <a href="{% url 'accounts:login' %}" class="btn btn-light nav-link text-dark px-3 d-inline-block mr-md-2">Login</a>
+                        <a href="{% url 'accounts:sign_up' %}" class="btn btn-light nav-link text-dark px-4 d-inline-block">Sign Up</a>
+                    </li>
+                {% endif %}
+            </ul>
+            <ul></ul>
+        </div>
+    </nav>
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert {% if message.tags != 'error' %} alert-{{ message.tags }} {% else %} alert-danger {% endif %} alert-dismissible fade show">
+                <button type="button" class="close" data-dismiss="alert">&times;</button>
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endif %}
+
+
+    {% block content %}
+    {% endblock content %}
+
+</body>
+</html>

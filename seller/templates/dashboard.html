@@ -1,0 +1,90 @@
+{% extends 'seller_base.html' %}
+ {% load static %}
+{% block title %} Orders {% endblock title %}
+
+{% block content %}
+
+    <link rel="stylesheet" type="text/css" href="{% static 'css/view_cart.css' %}">
+    <section>
+        {% if message.success %}
+            <div class="alert alert-success alert-dismissible">
+                <button type="button" class="close" data-dismiss="alert">&times;</button>
+                {{ message }}
+            </div>
+        {% endif %}
+        <div class="container my-md-5 my-3">
+            <div class="row">
+                <div class="col-md-8">
+                    <div class="row">
+{#                        <div class="col-md-4 mb-5">#}
+{#                            <div class="img-thumbnail py-5 text-center bg-light">#}
+{#                                <p class="font-weight-bold" style="font-size: 30px">#}
+{#                                    <i class="fa fa-users my-0" aria-hidden="true"></i> {{ all_users }}#}
+{#                                </p>#}
+{#                                <p class="font-weight-bold mb-0">USERS</p>#}
+{#                            </div>#}
+{#                        </div>#}
+                        <div class="col-md-4 mb-4">
+                            <div class="img-thumbnail py-5 text-center bg-light border border-dark">
+                                <p class="font-weight-bold" style="font-size: 30px">
+                                    <i class="fa fa-list-alt my-0" aria-hidden="true"></i> {{ all_orders }}
+                                </p>
+                                <p class="font-weight-bold mb-0 text-dark text-uppercase">All ORDERS</p>
+                            </div>
+                        </div>
+                        <div class="col-md-4 mb-4">
+                            <div class="img-thumbnail py-5 text-center bg-light border border-warning text-warning">
+                                <p class="font-weight-bold" style="font-size: 30px">
+                                    <i class="fa fa-hourglass-half my-0" aria-hidden="true"></i> {{ all_orders }}
+                                </p>
+                                <p class="font-weight-bold mb-0 text-dark text-uppercase">Yet to be shipped</p>
+                            </div>
+                        </div>
+                        <div class="col-md-4 mb-5">
+                            <div class="img-thumbnail py-5 text-center bg-light border border-info text-info">
+                                <p class="font-weight-bold" style="font-size: 30px">
+                                    <i class="fa fa-truck my-0" aria-hidden="true"></i> {{ delivered_items.count }}
+                                </p>
+                                <p class="font-weight-bold mb-0 text-dark">
+                                    Orders Shipped
+                                </p>
+                            </div>
+                        </div>
+                        <div class="col-md-4 mb-5">
+                            <div class="img-thumbnail py-5 text-center border border-success text-success bg-light">
+                                <p class="font-weight-bold" style="font-size: 30px">
+                                    <i class="fa fa-truck my-0" aria-hidden="true"></i> {{ delivered_items.count }}
+                                </p>
+                                <p class="font-weight-bold mb-0 text-dark text-uppercase">Orders Delivered</p>
+                            </div>
+                        </div>
+                        <div class="col-md-4 mb-5">
+                            <div class="img-thumbnail py-5 text-center bg-light">
+                                <p class="font-weight-bold" style="font-size: 30px">
+                                    <span class="fa fa-inr my-0" aria-hidden="true"></span>
+                                    4600
+                                </p>
+                                <p class="font-weight-bold mb-0">SALES</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <h3 class="text-uppercase">RECENT ORDERS</h3>
+                    <ul class="list-group">
+                        {% for order in ordered_items|slice:':4' %}
+                            <li class="list-group-item">{{ order.user }} - {{ order.ordered_on }}</li>
+                        {% endfor %}
+                    </ul>
+                    <hr>
+                    <h3 class="text-uppercase">RECENTLY DELIVERED</h3>
+                    <ul class="list-group">
+                        {% for order in delivered_items|slice:':4' %}
+                            <li class="list-group-item">{{ order.user }} - {{ order.delivered_on }}</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock content %}
