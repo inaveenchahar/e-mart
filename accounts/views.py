@@ -16,7 +16,7 @@ def sign_up(request):
             new_user = User.objects.create_user(
                 first_name=instance.first_name,
                 last_name=instance.last_name,
-                username=instance.username,
+                username=instance.username.lower(),
                 email=instance.email,
                 password=instance.password
             )
