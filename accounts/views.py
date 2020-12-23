@@ -44,7 +44,10 @@ def login_view(request):
             user = form.get_user()
             login(request, user)
             messages.success(request, 'You have successfully logged as {name}.'.format(name=user.username))
-            return redirect('main:homepage')
+            if request.user.is_superuser:
+                return redirect('seller:dashboard')
+            else:
+                return redirect('main:homepage')
     else:
         form = LoginForm()
     return render(request, 'login_view.html', {'form': form})
