@@ -25,12 +25,14 @@
 {#                            </div>#}
 {#                        </div>#}
                         <div class="col-md-4 mb-4">
-                            <div class="img-thumbnail py-5 text-center bg-light border border-dark">
-                                <p class="font-weight-bold" style="font-size: 30px">
-                                    <i class="fa fa-list-alt my-0" aria-hidden="true"></i> {{ all_orders }}
-                                </p>
-                                <p class="font-weight-bold mb-0 text-dark text-uppercase">All ORDERS</p>
-                            </div>
+                            <a href="{% url 'seller:all_orders' %}" class="text-decoration-none">
+                                <div class="img-thumbnail py-5 text-center bg-light border border-dark text-dark">
+                                    <p class="font-weight-bold" style="font-size: 30px">
+                                        <i class="fa fa-list-alt my-0" aria-hidden="true"></i> {{ all_orders }}
+                                    </p>
+                                    <p class="font-weight-bold mb-0 text-dark text-uppercase">All ORDERS</p>
+                                </div>
+                            </a>
                         </div>
                         <div class="col-md-4 mb-4">
                             <a href="{% url 'seller:yet_shipped' %}" class="text-decoration-none">

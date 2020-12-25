@@ -29,6 +29,14 @@ def index_seller(request):
         return redirect('main:homepage')
 
 
+def all_orders(request):
+    if request.user.is_superuser:
+        all_orders = Cart.objects.filter(completed=True)
+        return render(request, 'all_orders.html', {'all_orders': all_orders})
+    else:
+        return redirect('main:homepage')
+
+
 def yet_shipped_orders(request):
     if request.user.is_superuser:
         all_orders = Cart.objects.filter(completed=True, shipped=False, delivered=False)
