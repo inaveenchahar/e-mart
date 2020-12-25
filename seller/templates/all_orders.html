@@ -29,7 +29,9 @@
                 <tbody>
                     {% for order in all_orders %}
                         <tr>
-                            <td>{{ order.user }}</td>
+                            <td class="py-0">
+                                <a href="{% url 'seller:order_details' order.id %}" class="d-block py-3">{{ order.user }}</a>
+                            </td>
                             <td>{{ order.user.email }}</td>
                             <td>{{ order.cartproduct_set.all.count }}</td>
                             <td>{{ order.cart_value }}</td>

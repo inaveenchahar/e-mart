@@ -1,7 +1,9 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.models import User
 from cart.models import Cart
 from django.db.models import Sum
+import datetime
+
 
 # Create your views here.
 
@@ -27,7 +29,8 @@ def index_seller(request):
     if request.user.is_superuser:
         ordered_items = Cart.objects.filter(completed=True, delivered=False).order_by('-ordered_on')
         delivered_items = Cart.objects.filter(completed=True, delivered=True).order_by('-delivered_on')
-        return render(request, 'index_seller.html', {'ordered_items': ordered_items, 'delivered_items': delivered_items})
+        return render(request, 'index_seller.html',
+                      {'ordered_items': ordered_items, 'delivered_items': delivered_items})
     else:
         return redirect('main:homepage')
 
@@ -64,4 +67,32 @@ def delivered_orders(request):
         return redirect('main:homepage')
 
 
+def order_details(request, cart_id):
+    if request.user.is_superuser:
+        order = get_object_or_404(Cart, id=cart_id)
+        return render(request, 'order_details.html', {'order': order})
+    else:
+        return redirect('main:homepage')
 
+
+def marked_shipped(request, cart_id):
+    if request.user.is_superuser:
+        cart = get_object_or_404(Cart, id=cart_id)
+        cart.shipped = True
+        cart.shipped_on = datetime.date.today()
+        cart.save()
+        return redirect('seller:order_details', cart.id)
+    else:
+        return redirect('main:homepage')
+
+
+def marked_delivered(request, cart_id):
+    if request.user.is_superuser:
+        cart = get_object_or_404(Cart, id=cart_id)
+        if cart.shipped is True:
+            cart.delivered = True
+            cart.delivered_on = datetime.date.today()
+            cart.save()
+        return redirect('seller:order_details', cart.id)
+    else:
+        return redirect('main:homepage')

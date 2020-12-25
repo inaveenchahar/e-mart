@@ -1,0 +1,100 @@
+{% extends 'seller_base.html' %}
+ {% load static %}
+{% block title %} Order Details {% endblock title %}
+
+{% block content %}
+
+    <section>
+        {% if message %}
+            <div class="alert {% if message.success %}alert-success{% elif message.error %}alert-danger{% endif %} alert-dismissible">
+                <button type="button" class="close" data-dismiss="alert">&times;</button>
+                {{ message }}
+            </div>
+        {% endif %}
+
+        <div class="container py-md-5 py-3">
+            <div class="img-thumbnail mb-5 py-3">
+                <div class="row text-center ">
+                    <div class="col-md-4">
+                        <i class="fa fa-check-circle my-0 text-success" aria-hidden="true"></i>
+                        <br>
+                        Ordered on
+                        <br>
+                        {{ order.ordered_on }}
+                    </div>
+                    <div class="col-md-4">
+                        {% if order.shipped is True %}
+                            <i class="fa fa-check-circle my-0 text-success" aria-hidden="true"></i>
+                        {% else %}
+                            <i class="fa fa-times my-0 text-danger" aria-hidden="true"></i>
+                        {% endif %}
+                        <br>
+                        Shipped on
+                        <br>
+                        {% if order.shipped is True %}
+                            {{ order.shipped_on }}
+                        {% else %}
+                            Pending
+                            <hr>
+                            <a href="{% url 'seller:marked_shipped' order.id %}" class="btn btn-outline-success">Mark Shipped</a>
+                        {% endif %}
+                    </div>
+                    <div class="col-md-4">
+                        {% if order.delivered is True %}
+                            <i class="fa fa-check-circle my-0 text-success" aria-hidden="true"></i>
+                        {% else %}
+                            <i class="fa fa-times my-0 text-danger" aria-hidden="true"></i>
+                        {% endif %}
+                        <br>
+                        Delivered on
+                        <br>
+                        {% if order.delivered is True %}
+                            {{ order.delivered_on }}
+                        {% else %}
+                            Pending
+                            {% if order.shipped is True %}
+                                <hr>
+                                <a href="{% url 'seller:marked_delivered' order.id %}" class="btn btn-outline-success">Mark Delivered</a>
+                            {% endif %}
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-8">
+
+                    <h2 class="text-uppercase clearfix">
+                        Order Details
+                        <span class="float-right" style="font-size: 18px">Total- {{ order.cart_value }}</span>
+                    </h2>
+
+                    {% for product in order.cartproduct_set.all %}
+                        <div class="img-thumbnail py-4 my-3 bg-light px-2">
+                            <div class="row mx-0">
+                                <div class="col-md-3 col-4">
+                                    <img alt="{{ product.product.title }}" src="{{ product.product.image.url }}" style="height: 72px">
+                                </div>
+                                <div class="col-md-6 col-8 px-0">
+                                    <p class="font-weight-bold mb-1">{{ product.product.title }}</p>
+                                    <p class="text-muted my-0">Quantity {{ product.quantity }}</p>
+                                    <p class="font-weight-bold my-1 d-md-none">{{ product.price }}</p>
+                                </div>
+                                <div class="col-md-3">
+                                    <p class="font-weight-bold my-2 d-none d-md-block ">{{ product.price }}</p>
+                                </div>
+{#                                <div class="col-md-4 pr-md-1">#}
+{#                                    {% if cart.delivered %}#}
+{#                                        <p class="text-success font-weight-bold">Delivered on: <br> {{ cart.delivered_on }}</p>#}
+{#                                    {% else %}#}
+{#                                        <p class="font-weight-bold mt-2">Ordered on: <br> {{ cart.ordered_on }}</p>#}
+{#                                        <p class="small my-0 text-info">Delivery time 5-6 days</p>#}
+{#                                    {% endif %}#}
+{#                                </div>#}
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock content %}
