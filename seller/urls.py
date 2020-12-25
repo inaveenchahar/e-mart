@@ -9,7 +9,6 @@ urlpatterns = [
     path('yet-to-be-shipped-orders/', views.yet_shipped_orders, name='yet_shipped'),
     path('shipped-orders/', views.shipped_orders, name='shipped_orders'),
     path('delivered-orders/', views.delivered_orders, name='delivered_orders'),
-    path('order-status/', views.index_seller, name='index_seller'),
     path('all-orders/<cart_id>/', views.order_details, name='order_details'),
     path('all-orders/<cart_id>/marked-shipped/', views.marked_shipped, name='marked_shipped'),
     path('all-orders/<cart_id>/marked-delivered/', views.marked_delivered, name='marked_delivered'),
