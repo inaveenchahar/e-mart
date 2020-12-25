@@ -43,14 +43,16 @@
                             </a>
                         </div>
                         <div class="col-md-4 mb-5">
-                            <div class="img-thumbnail py-5 text-center bg-light border border-info text-info">
-                                <p class="font-weight-bold" style="font-size: 30px">
-                                    <i class="fa fa-truck my-0" aria-hidden="true"></i> {{ delivered_items.count }}
-                                </p>
-                                <p class="font-weight-bold mb-0 text-dark">
-                                    Orders Shipped
-                                </p>
-                            </div>
+                            <a href="{% url 'seller:shipped_orders' %}" class="text-decoration-none">
+                                <div class="img-thumbnail py-5 text-center bg-light border border-info text-info">
+                                    <p class="font-weight-bold" style="font-size: 30px">
+                                        <i class="fa fa-truck my-0" aria-hidden="true"></i> {{ delivered_items.count }}
+                                    </p>
+                                    <p class="font-weight-bold mb-0 text-dark">
+                                        Orders Shipped
+                                    </p>
+                                </div>
+                            </a>
                         </div>
                         <div class="col-md-4 mb-5">
                             <div class="img-thumbnail py-5 text-center border border-success text-success bg-light">
