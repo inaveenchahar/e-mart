@@ -153,3 +153,11 @@ CKEDITOR_CONFIGS = {
     },
 }
 
+
+EMAIL_HOST = 'smtp.gmail.com'
+PORT = 587
+EMAIL_HOST_USER = os.getenv('EMAIL_USER')
+EMAIL_HOST_PASSWORD = os.getenv('EMAIL_PASSWORD')
+EMAIL_USE_TLS = True
+
+
