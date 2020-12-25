@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from .models import UserProfile, UserAddress
+from .models import UserAddress
 from django.contrib.auth.models import User
 from .forms import SignUpForm, LoginForm, UserAddressForm
 from cart.models import CartProduct
