@@ -4,7 +4,8 @@ from .models import Cart, CartProduct
 
 
 class CartAdmin(admin.ModelAdmin):
-    list_display = ['user', 'added_on', 'updated_on', 'completed']
+    list_display = ['user', 'added_on', 'updated_on', 'completed', 'shipped', 'delivered']
+    list_filter = ['completed', 'shipped', 'delivered']
 
 
 admin.site.register(Cart, CartAdmin)

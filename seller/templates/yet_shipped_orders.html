@@ -1,0 +1,42 @@
+{% extends 'seller_base.html' %}
+ {% load static %}
+{% block title %} Orders {% endblock title %}
+
+{% block content %}
+
+    <link rel="stylesheet" type="text/css" href="{% static 'css/view_cart.css' %}">
+    <section>
+        {% if message.success %}
+            <div class="alert alert-success alert-dismissible">
+                <button type="button" class="close" data-dismiss="alert">&times;</button>
+                {{ message }}
+            </div>
+        {% endif %}
+        <div class="container my-md-5 my-3">
+            <table class="table table-bordered my-4">
+                <thead>
+                    <tr>
+                        <th>User Name</th>
+                        <th>Email</th>
+                        <th>Items</th>
+                        <th>Cart Value in <i class="fa fa-inr my-0" aria-hidden="true"></i></th>
+                        <th>Delivery Charges in <i class="fa fa-inr my-0" aria-hidden="true"></i></th>
+                        <th>Ordered On</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for order in all_orders %}
+                        <tr>
+                            <td>{{ order.user }}</td>
+                            <td>{{ order.user.email }}</td>
+                            <td>{{ order.cartproduct_set.all.count }}</td>
+                            <td>{{ order.cart_value }}</td>
+                            <td>{% if order.delivery_charges == 0 %}FREE {% else %} {{ order.delivery_charges }}/- {% endif %}</td>
+                            <td>{{ order.ordered_on }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </section>
+{% endblock content %}
