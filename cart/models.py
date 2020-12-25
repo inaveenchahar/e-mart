@@ -10,6 +10,7 @@ class Cart(models.Model):
     cart_value = models.FloatField(default=0)
     delivery_charges = models.IntegerField(default=40)
     completed = models.BooleanField(default=False)
+    shipped = models.BooleanField(default=False, help_text='Mark if cart products are shipped')
     delivered = models.BooleanField(default=False)
     delivered_on = models.DateField(blank=True, null=True)
     added_on = models.DateTimeField(auto_now_add=True)
