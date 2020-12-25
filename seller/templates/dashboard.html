@@ -28,7 +28,7 @@
                             <a href="{% url 'seller:all_orders' %}" class="text-decoration-none">
                                 <div class="img-thumbnail py-5 text-center bg-light border border-dark text-dark">
                                     <p class="font-weight-bold" style="font-size: 30px">
-                                        <i class="fa fa-list-alt my-0" aria-hidden="true"></i> {{ all_orders }}
+                                        <i class="fa fa-list-alt my-0" aria-hidden="true"></i> {{ all_orders.count }}
                                     </p>
                                     <p class="font-weight-bold mb-0 text-dark text-uppercase">All ORDERS</p>
                                 </div>
@@ -38,7 +38,7 @@
                             <a href="{% url 'seller:yet_shipped' %}" class="text-decoration-none">
                                 <div class="img-thumbnail py-5 text-center bg-light border border-warning text-warning">
                                     <p class="font-weight-bold" style="font-size: 30px">
-                                        <i class="fa fa-hourglass-half my-0" aria-hidden="true"></i> {{ yet_shipped_orders }}
+                                        <i class="fa fa-hourglass-half my-0" aria-hidden="true"></i> {{ yet_shipped_orders.count }}
                                     </p>
                                     <p class="font-weight-bold mb-0 text-dark text-uppercase">Yet to be shipped</p>
                                 </div>
@@ -48,7 +48,7 @@
                             <a href="{% url 'seller:shipped_orders' %}" class="text-decoration-none">
                                 <div class="img-thumbnail py-5 text-center bg-light border border-info text-info">
                                     <p class="font-weight-bold" style="font-size: 30px">
-                                        <i class="fa fa-truck my-0" aria-hidden="true"></i> {{ delivered_items.count }}
+                                        <i class="fa fa-truck my-0" aria-hidden="true"></i> {{ shipped_orders.count }}
                                     </p>
                                     <p class="font-weight-bold mb-0 text-dark">
                                         Orders Shipped
@@ -60,7 +60,7 @@
                             <a href="{% url 'seller:delivered_orders' %}" class="text-decoration-none">
                                 <div class="img-thumbnail py-5 text-center border border-success text-success bg-light">
                                     <p class="font-weight-bold" style="font-size: 30px">
-                                        <i class="fa fa-truck my-0" aria-hidden="true"></i> {{ delivered_items.count }}
+                                        <i class="fa fa-handshake-o my-0" aria-hidden="true"></i> {{ delivered_orders.count }}
                                     </p>
                                     <p class="font-weight-bold mb-0 text-dark text-uppercase">Orders Delivered</p>
                                 </div>
@@ -70,7 +70,7 @@
                             <div class="img-thumbnail py-5 text-center bg-light">
                                 <p class="font-weight-bold" style="font-size: 30px">
                                     <span class="fa fa-inr my-0" aria-hidden="true"></span>
-                                    4600
+                                    {{ revenue_generated }}
                                 </p>
                                 <p class="font-weight-bold mb-0">SALES</p>
                             </div>
@@ -78,16 +78,23 @@
                     </div>
                 </div>
                 <div class="col-md-4">
-                    <h3 class="text-uppercase">RECENT ORDERS</h3>
+                    <h3 class="text-uppercase">RECENTLY PLACED ORDERS</h3>
                     <ul class="list-group">
-                        {% for order in ordered_items|slice:':4' %}
+                        {% for order in all_orders|slice:':4' %}
                             <li class="list-group-item">{{ order.user }} - {{ order.ordered_on }}</li>
                         {% endfor %}
                     </ul>
                     <hr>
-                    <h3 class="text-uppercase">RECENTLY DELIVERED</h3>
+                    <h3 class="text-uppercase">RECENTLY SHIPPED ORDERS</h3>
                     <ul class="list-group">
-                        {% for order in delivered_items|slice:':4' %}
+                        {% for order in shipped_orders|slice:':4' %}
+                            <li class="list-group-item">{{ order.user }} - {{ order.shipped_on }}</li>
+                        {% endfor %}
+                    </ul>
+                    <hr>
+                    <h3 class="text-uppercase">RECENTLY DELIVERED ORDERS</h3>
+                    <ul class="list-group">
+                        {% for order in delivered_orders|slice:':4' %}
                             <li class="list-group-item">{{ order.user }} - {{ order.delivered_on }}</li>
                         {% endfor %}
                     </ul>

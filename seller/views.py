@@ -1,20 +1,23 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.models import User
 from cart.models import Cart
+from django.db.models import Sum
 
 # Create your views here.
 
 
 def dashboard(request):
     if request.user.is_superuser:
-        all_orders = Cart.objects.filter(completed=True).count()
-        yet_shipped_orders = Cart.objects.filter(shipped=False, delivered=False, completed=True).count()
-        ordered_items = Cart.objects.filter(completed=True, shipped=False, delivered=False)
-        delivered_items = Cart.objects.filter(completed=True, delivered=True)
+        all_orders = Cart.objects.filter(completed=True)
+        yet_shipped_orders = Cart.objects.filter(completed=True, shipped=False, delivered=False)
+        shipped_orders = Cart.objects.filter(completed=True, shipped=True, delivered=False)
+        delivered_orders = Cart.objects.filter(completed=True, shipped=True, delivered=True)
+        revenue_generated = Cart.objects.filter(completed=True).aggregate(Sum('cart_value'))['cart_value__sum']
         return render(request, 'dashboard.html', {'all_orders': all_orders,
-                                                  'ordered_items': ordered_items,
-                                                  'delivered_items': delivered_items,
-                                                  'yet_shipped_orders': yet_shipped_orders
+                                                  'delivered_orders': delivered_orders,
+                                                  'yet_shipped_orders': yet_shipped_orders,
+                                                  'revenue_generated': revenue_generated,
+                                                  'shipped_orders': shipped_orders
                                                   })
     else:
         return redirect('main:homepage')
