@@ -45,4 +45,12 @@ def shipped_orders(request):
         return redirect('main:homepage')
 
 
+def delivered_orders(request):
+    if request.user.is_superuser:
+        all_orders = Cart.objects.filter(completed=True, shipped=True, delivered=True)
+        return render(request, 'delivered_orders.html', {'all_orders': all_orders})
+    else:
+        return redirect('main:homepage')
+
+
 
