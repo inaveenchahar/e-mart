@@ -29,15 +29,26 @@
                                         <p class="font-weight-bold my-1 d-md-none">{{ a.price }}</p>
                                     </div>
                                     <div class="col-md-2">
-                                        <p class="font-weight-bold my-2 d-none d-md-block ">{{ a.price }}</p>
+                                        <p class="font-weight-bold mb-2 d-none d-md-block ">{{ a.price }}</p>
                                     </div>
-                                    <div class="col-md-4 pr-md-1">
-                                        {% if cart.delivered %}
-                                            <p class="text-success font-weight-bold">Delivered on: <br> {{ cart.delivered_on }}</p>
-                                        {% else %}
-                                            <p class="font-weight-bold mt-2">Ordered on: <br> {{ cart.ordered_on }}</p>
-                                            <p class="small my-0 text-info">Delivery time 5-6 days</p>
-                                        {% endif %}
+                                    <div class="col-md-4 pr-md-1 mt-3 mt-md-1">
+                                        <p class="font-weight-bold mb-2">Ordered on: <br> {{ cart.ordered_on }}</p>
+                                        <p class="small my-0 text-dark">Delivery time 5-6 days</p>
+
+                                        <p class="mt-2 mb-md-0">
+                                            <span class="font-weight-bold">Status:</span>
+                                            {% if cart.delivered %}
+                                                <span class="text-success">Delivered</span>
+                                                <br>
+                                                On <span class="font-weight-bold">{{ cart.delivered_on }}</span>
+                                            {% elif cart.shipped %}
+                                                <span class="text-info">Shipped</span>
+                                                <br>
+                                                On <span class="font-weight-bold">{{ cart.shipped_on }}</span>
+                                            {% else %}
+                                                <span class="text-warning font-weight-bold">Processing</span>
+                                            {% endif %}
+                                        </p>
                                     </div>
                                 </div>
 
