@@ -107,7 +107,6 @@ def remove_cart_product(request, cp_id):
         return redirect('main:homepage')
 
 
-
 def update_cart(request):
     if request.user.is_authenticated:
         cart = Cart.objects.get(completed=False, user=request.user)

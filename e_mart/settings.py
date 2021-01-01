@@ -135,8 +135,8 @@ RAZORPAY_KEY_ID = os.getenv('RAZORPAY_KEY_ID')
 RAZORPAY_KEY_SECRET = os.getenv('RAZORPAY_KEY_SECRET')
 
 
-# free delivery on
-CART_VALUE = 1000
+# free delivery on and above
+CART_VALUE = 5000
 # if free delivery is not applicable
 DELIVERY_CHARGE = 40
 

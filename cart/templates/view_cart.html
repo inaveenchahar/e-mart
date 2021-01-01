@@ -43,9 +43,21 @@
                         </div>
                         <div class="col-md-4">
                             <div class="bg-light p-3 mb-5">
-                                <h2 class='pt-0 mt-0'>Price Details</h2>
-                                <p class="" style="font-size: 18px">Total  <span class="float-right" style="font-size: 18px">{{ cart.cart_value }}</span></p>
-                                <p class="" style="font-size: 18px">Delivery Charges <span class="float-right" style="font-size: 18px">{% if cart.delivery_charges == 0 %} Free {% else %} {{ cart.delivery_charges }}{% endif %}</span></p>
+                                <h2 class='pt-0 my-0'>Price Details</h2>
+                                <hr>
+                                <p class="" style="font-size: 18px">
+                                    Cart Price
+                                    <span class="float-right" style="font-size: 18px">{{ cart.cart_value }}</span>
+                                </p>
+                                 <p class="" style="font-size: 18px">Delivery Charges
+                                    <span class="float-right" style="font-size: 18px">
+                                        {% if cart.delivery_charges == 0 %}
+                                            Free
+                                        {% else %}
+                                            {{ cart.delivery_charges }}
+                                        {% endif %}
+                                    </span>
+                                </p>
                             </div>
                             <a id="orderBtn" href="{% url 'payment:order_create' cart.id %}" class="btn btn-warning btn-block py-3 py-md-2 my-sm-3">Create Order</a>
                         </div>

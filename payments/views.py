@@ -27,6 +27,8 @@ def order_create(request, id):
     if request.user.is_authenticated:
         cart = get_object_or_404(Cart, id=id, user=request.user)
         order_amount = int(cart.cart_value) * 100
+        if cart.delivery_charges > 0:
+            order_amount = order_amount + (settings.DELIVERY_CHARGE * 100)
         order_currency = 'INR'
         order_receipt = 'order_receipt_' + str(request.user.username)
         client = razorpay.Client(auth=(settings.RAZORPAY_KEY_ID, settings.RAZORPAY_KEY_SECRET))

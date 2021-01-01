@@ -59,17 +59,18 @@
                                     </a>
                                 {% endif %}
                                 <span class="d-block font-weight-bold">{{ address.full_name }} | {{ address.phone_no }}</span>
-                                <span class="d-block ">{{ address.house_no }}, {{ address.address }} near {{ address.landmark }}</span>
+                                <span class="d-block">{{ address.house_no }}, {{ address.address }} near {{ address.landmark }}</span>
                                 <span class="d-block font-weight-bold">{{ address.city }} - {{ address.pincode }}</span>
                             </div>
                         {% endfor %}
                     </div>
-                    <div class="col-md-4 offset-md-1">
+                    <div class="col-md-4 offset-md-1 order-first">
                         <h2>Price Details</h2>
                         <div class="img-thumbnail px-3 pt-3 pb-2 mb-5">
-                            <p>Price ({{ cart_products.count }} item) - {{ cart.cart_value }}</p>
-                            <p>Delivery Charges - Free</p>
-                            <p class="">Total Amount - {{ cart.cart_value }}</p>
+                            <p class="font-weight-bold">Price ({{ cart_products.count }} item) - {{ cart.cart_value|floatformat:'0' }}</p>
+                            <p class="font-weight-bold">Delivery Charges - {% if cart.delivery_charges %} {{ cart.delivery_charges }} {% else %} FREE {% endif %}</p>
+                            <hr>
+                            <p class="font-weight-bold text-uppercase">Total - {{ cart.cart_value| add:cart.delivery_charges }}</p>
                         </div>
                         {% if ud_address %}
                             <form action="{% url 'payment:transaction_view' cart.id order.order_id %}" method="POST">
@@ -87,7 +88,7 @@
                                     data-prefill.contact="+91"
                                     data-theme.color="#f0ad4e"
                                 ></script>
-                                <input type="hidden" class="btn btn-lg" custom="Hidden Element" name="hidden">
+                                <input type="hidden" class="btn" custom="Hidden Element" name="hidden">
                             </form>
                         {% else %}
                             <p>Add address to proceed.</p>
