@@ -35,7 +35,7 @@ def cart_product(request, c_slug, p_slug, id):
         c_product.quantity += 1
         c_product.save()
         messages.success(request, "You have successfully added {prdt} in your cart.".format(prdt=product))
-        return redirect('main:homepage')
+        return redirect('product:category_details', category.slug)
 
     return redirect('product:product_details', category.slug, product.slug, product.id)
 
