@@ -8,6 +8,8 @@ from django.views.decorators.csrf import csrf_exempt
 from django.conf import settings
 import razorpay
 import datetime
+from django.core.mail import send_mail
+
 
 # Create your views here.
 
@@ -125,6 +127,19 @@ def transaction_view(request, cart_id, order_id):
                     paid_by=request.user,
                     status='CAPTURED'
                 )
+                try:
+                    send_mail(
+                        subject="Purchase Successful",
+                        recipient_list=[request.user.email],
+                        from_email=settings.EMAIL_HOST_USER,
+                        fail_silently=True,
+                        message="Your purchase has been done successfully and delivery will be done within"
+                                " 6-7 business days\n"
+                                "Thankyou😊 for shopping with us"
+                    )
+                    print('email sent')
+                except Exception as e:
+                    print(e)
                 payment.save()
                 messages.success(request, 'order successfully placed')
                 return redirect('main:homepage')

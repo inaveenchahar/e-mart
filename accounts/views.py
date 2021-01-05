@@ -5,6 +5,8 @@ from .forms import SignUpForm, LoginForm, UserAddressForm
 from cart.models import CartProduct
 from django.contrib.auth import login, logout
 from django.contrib import messages
+from django.core.mail import send_mail
+from django.conf import settings
 # Create your views here.
 
 
@@ -20,6 +22,17 @@ def sign_up(request):
                 email=instance.email,
                 password=instance.password
             )
+            try:
+                send_mail(
+                    subject="Welcome",
+                    recipient_list=new_user.email,
+                    from_email=settings.EMAIL_HOST_USER,
+                    fail_silently=True,
+                    message="Your account has been created with us with username {name}\n"
+                            "Thankyou😊".format(name=new_user.username)
+                )
+            except Exception as e:
+                print(e)
             login(request, new_user)
             messages.success(request, 'You have successfully signed up as {name}.'.format(name=new_user.username))
             return redirect('main:homepage')
