@@ -28,8 +28,7 @@ def category_details(request, c_slug):
     return render(request, 'category_details.html', {'category': category, 'all_products': all_products, 'tcp': tcp})
 
 
-def product_details(request, c_slug, p_slug, id):
-    category = get_object_or_404(Category, slug=c_slug)
+def product_details(request, p_slug, id):
     product = get_object_or_404(Product, slug=p_slug, id=id)
     tcp = 0
     cart_product = None
@@ -44,4 +43,4 @@ def product_details(request, c_slug, p_slug, id):
                 already_exists = True
 
         tcp = cart_product.count()
-    return render(request, 'product_details.html', {'category': category, 'product': product, 'tcp': tcp, 'already_exists': already_exists})
+    return render(request, 'product_details.html', {'product': product, 'tcp': tcp, 'already_exists': already_exists})

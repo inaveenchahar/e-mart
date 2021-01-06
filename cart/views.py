@@ -12,8 +12,7 @@ from django.conf import settings
 # Create your views here.
 
 
-def cart_product(request, c_slug, p_slug, id):
-    category = get_object_or_404(Category, slug=c_slug)
+def cart_product(request, p_slug, id):
     product = get_object_or_404(Product, slug=p_slug, id=id)
     if request.user.is_authenticated:
         if Cart.objects.filter(completed=False, user=request.user):
@@ -31,13 +30,13 @@ def cart_product(request, c_slug, p_slug, id):
             )
         if c_product.quantity > product.buy_limit:
             messages.warning(request, "You can only add maximum {quantity} of this product".format(quantity=product.buy_limit))
-            return redirect('product:product_details', category.slug, product.slug, product.id)
+            return redirect('product:product_details', product.slug, product.id)
         c_product.quantity += 1
         c_product.save()
         messages.success(request, "You have successfully added {prdt} in your cart.".format(prdt=product))
-        return redirect('product:category_details', category.slug)
-
-    return redirect('product:product_details', category.slug, product.slug, product.id)
+        return redirect('product:product_details', product.slug, product.id)
+    messages.warning(request, "Login/Sing up to add this product in your cart")
+    return redirect('product:product_details', product.slug, product.id)
 
 
 # def cart_product(request, c_slug, p_slug, id):
