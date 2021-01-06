@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from products.models import Category, Product
 from cart.models import CartProduct
 # Create your views here.
@@ -15,4 +15,18 @@ def homepage(request):
     else:
         tcp = 0
     return render(request, 'homepage.html', {'all_categories': all_categories, 'tcp': tcp})
+
+
+def product_search(request):
+    all_products = Product.objects.filter(visible=True)
+    query = request.GET.get('q')
+    print(query)
+    if query:
+        all_products = Product.objects.filter(visible=True, title__icontains=query).order_by('order')
+        # for product in all_products:
+        #     for category in product.category.all()[1]:
+        #         print(category)
+        return render(request, 'category_details.html', {'all_products': all_products})
+    else:
+        return redirect('main:homepage')
 

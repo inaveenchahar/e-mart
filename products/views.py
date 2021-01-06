@@ -18,7 +18,7 @@ from cart.models import CartProduct
 
 def category_details(request, c_slug):
     category = get_object_or_404(Category, slug=c_slug)
-    all_products = Product.objects.filter(category=category).order_by('order')
+    all_products = Product.objects.filter(category=category, visible=True).order_by('order')
     tcp = 0
     if request.user.is_authenticated:
         """

@@ -13,12 +13,14 @@
     <nav class="navbar navbar-dark bg-dark navbar-expand-md px-md-3">
         <a style="font-size: 24px" href="{% url 'main:homepage' %}" class="navbar-brand">WatchPool</a>
 
+
         <a href="{% url 'cart:view_cart' %}" class="text-white d-md-none navbar-link">
             <i class="fa fa-shopping-cart my-0" aria-hidden="true"></i>
             {% if tcp > 0 %}
                 <span class="badge badge-pill badge-light">{{ tcp }}</span>
             {% endif %}
         </a>
+
 
         <button type="button" class="navbar-toggler order-first" data-toggle="collapse" data-target="#navbarCollapse">
             <span class="navbar-toggler-icon"></span>
@@ -30,6 +32,15 @@
                     <a href="{% url 'main:homepage' %}" class="nav-link text-white">Home</a>
                 </li>
             </ul>
+            <form class="form-inline ml-md-3 d-md-block d-none">
+                <div class="input-group">
+                    <input type="text" class="form-control" placeholder="Search" size="50">
+                    <div class="input-group-append">
+                        <button class="btn btn-warning" type="submit"><i class="fa fa-search" aria-hidden="true"></i></button>
+                    </div>
+                </div>
+            </form>
+
             <ul class="navbar-nav ml-auto">
                 <li class="nav-item mr-md-2 d-none d-md-block">
                     <a href="{% url 'cart:view_cart' %}" class="nav-link text-white">
@@ -49,30 +60,31 @@
                                 Hi, <span class="text-uppercase">{{ request.user.username }}</span>
                             </a>
                             <div class="dropdown-menu py-0">
-                                <a class="dropdown-item py-2" href="#">Profile</a>
+{#                                <a class="dropdown-item py-2" href="#">Profile</a>#}
                                 <a class="dropdown-item py-2" href="{% url 'accounts:manage_addresses' %}">Manage Address</a>
-                                <a class="dropdown-item py-2" href="{% url 'payment:order_history' %}">Orders</a>
+{#                                <a class="dropdown-item py-2" href="{% url 'payment:order_history' %}">Orders</a>#}
                                 <div class="dropdown-divider my-0"></div>
                                 <a class="dropdown-item py-2 text-danger" href="{% url 'accounts:logout' %}">Logout</a>
                             </div>
                         </div>
                     </li>
-
-{#                     <li class="nav-item">#}
-{#                        <a href="{% url 'accounts:logout' %}" class="btn btn-danger text-white nav-link">Log Out</a>#}
-{#                    </li>#}
                 {% else %}
                     <li class="nav-item">
                         <a href="{% url 'accounts:login' %}" class="btn btn-light nav-link text-dark px-3 d-inline-block mr-md-2">Login</a>
                         <a href="{% url 'accounts:sign_up' %}" class="btn btn-light nav-link text-dark px-4 d-inline-block">Sign Up</a>
                     </li>
-{#                    <li class="nav-item">#}
-{#                        <a href="{% url 'accounts:sign_up' %}" class="btn btn-light nav-link text-dark px-4 d-inline-block">Sign Up</a>#}
-{#                    </li>#}
                 {% endif %}
             </ul>
             <ul></ul>
         </div>
+        <form class="form-inline my-2 d-md-none" action="{% url 'main:product_search' %}" method="GET">
+            <div class="input-group">
+                <input type="search" class="form-control" placeholder="Search" size="50" name="q" value="{{ request.GET.q }}">
+                <div class="input-group-append">
+                    <button class="btn btn-warning" type="submit"><i class="fa fa-search" aria-hidden="true"></i></button>
+                </div>
+            </div>
+        </form>
     </nav>
     {% if messages %}
         {% for message in messages %}

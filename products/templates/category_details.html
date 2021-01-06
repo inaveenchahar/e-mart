@@ -14,10 +14,12 @@
         {% endif %}
         <div class="container py-md-5 py-3">
             <h2 class="mb-md-3 text-uppercase">{{ category | upper }}</h2>
+{#            <h1>{{ category.slug }}</h1>#}
             <div class="row">
                 {% for product in all_products %}
+                    {% with v.docs|first as first_doc %}{{ first_doc.id }}{% endwith %}
                     <div class="col-lg-3 col-md-4 col-sm-6 col-12">
-                        <a href="{% url 'product:product_details' category.slug product.slug product.id %}">
+                        <a href="{% url 'product:product_details' product.category.all.0.slug product.slug product.id %}">
                             <div class="card border-0 mb-4 px-2">
                                 <img id="p_image" src="{{ product.image.url }}" class="card-img-top embed-responsive border" alt="product-image">
                                 <div class="card-body py-2 px-2 text-center">
