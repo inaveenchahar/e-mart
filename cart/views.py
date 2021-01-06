@@ -26,7 +26,7 @@ def cart_product(request, c_slug, p_slug, id):
             c_product = CartProduct.objects.create(
                 cart=cart,
                 product=product,
-                price=product.price,
+                price=product.discounted_price,
                 quantity=0
             )
         if c_product.quantity > product.buy_limit:
@@ -137,8 +137,8 @@ def view_cart(request):
             cart_products = CartProduct.objects.filter(cart=cart)
             total = 0
             for item in cart_products:
-                total = total + (item.quantity * item.product.price)
-                item.price = item.product.price
+                total = total + (item.quantity * item.product.discounted_price)
+                item.price = item.product.discounted_price
                 item.save()
             cart.cart_value = total
             if cart.cart_value > settings.CART_VALUE:

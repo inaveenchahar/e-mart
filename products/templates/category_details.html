@@ -24,8 +24,13 @@
                                     <p class="card-title text-dark my-1 text-uppercase">{{ product.title }}</p>
                                 </div>
                                 <div class="card-footer bg-white border-0 text-dark pt-0 text-center">
+                                    {% if product.price %}
+                                        <span class="mr-2 mt-0 text-muted" style="text-decoration: line-through">
+                                            <i class="fa fa-inr my-0" aria-hidden="true"></i> {{ product.price | floatformat:"0" }}
+                                        </span>
+                                    {% endif %}
                                     <span class="lead" style="vertical-align: middle">
-                                        <i class="fa fa-inr my-0" aria-hidden="true"></i> {{ product.price | floatformat:"0" }}
+                                        <i class="fa fa-inr my-0" aria-hidden="true"></i> {{ product.discounted_price | floatformat:"0" }}
                                     </span>
                                 </div>
                             </div>

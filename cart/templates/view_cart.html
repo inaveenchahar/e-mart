@@ -33,7 +33,7 @@
                                         </div>
                                         <div class="col-lg-10 col-md-9 col-sm-8 col-8">
                                             <h4>{{ product.product.title }}</h4>
-                                            <h3 class="font-weight-bold my-md-3"><i class="fa fa-inr my-0" aria-hidden="true"></i>{{ product.product.price | floatformat:"0" }}</h3>
+                                            <h3 class="font-weight-bold my-md-3"><i class="fa fa-inr my-0" aria-hidden="true"></i>{{ product.product.discounted_price | floatformat:"0" }}</h3>
                                             <a href="{% url 'cart:remove_cart_product' product.id %}" class="font-weight-bold text-dark text-decoration-none" style="font-size: 14px">REMOVE</a>
                                         </div>
                                     </div>

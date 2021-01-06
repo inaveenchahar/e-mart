@@ -29,7 +29,8 @@ class Product(models.Model):
     slug = models.SlugField(max_length=100)
     image = models.ImageField(null=True, upload_to='images/product')
     description = RichTextField(help_text='Product Description', blank=True)
-    price = models.FloatField(help_text='Product price')
+    price = models.IntegerField(help_text='Without discount price. Leave Blank if no discount', blank=True, null=True)
+    discounted_price = models.IntegerField(null=True, help_text='Product price')
     buy_limit = models.IntegerField(default=4)
     order = models.IntegerField(blank=True, null=True, help_text='Display order')
     visible = models.BooleanField(default=True, help_text='Visible to users')
@@ -39,6 +40,11 @@ class Product(models.Model):
 
     def __str__(self):
         return self.title
+
+    def clean(self, *args, **kwargs):
+        if self.price:
+            if self.price < self.discounted_price:
+                raise UserWarning("discounted price must be less than price")
 
     class Meta:
         ordering = ['-added_on']
