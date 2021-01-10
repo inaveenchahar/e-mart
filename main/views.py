@@ -1,12 +1,13 @@
 from django.shortcuts import render, redirect
 from products.models import Category, Product
 from cart.models import CartProduct
-# Create your views here.
 
 
 def homepage(request):
+    """
+        homepage view of the website
+    """
     all_categories = Category.objects.filter(visible=True).order_by('order')
-    # all_products = Product.objects.filter(category__visible=True, order__lte=4).order_by('order')
     if request.user.is_authenticated:
         """
             tcp = total cart products
@@ -18,14 +19,12 @@ def homepage(request):
 
 
 def product_search(request):
-    all_products = Product.objects.filter(visible=True)
+    """
+        gets the search keyword from the navbar form and matches with the products name
+    """
     query = request.GET.get('q')
-    print(query)
     if query:
         all_products = Product.objects.filter(visible=True, title__icontains=query).order_by('order')
-        # for product in all_products:
-        #     for category in product.category.all()[1]:
-        #         print(category)
         return render(request, 'category_details.html', {'all_products': all_products})
     else:
         return redirect('main:homepage')

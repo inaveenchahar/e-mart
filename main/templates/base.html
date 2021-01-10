@@ -32,15 +32,8 @@
                     <a href="{% url 'main:homepage' %}" class="nav-link text-white">Home</a>
                 </li>
             </ul>
-{#            <form class="form-inline ml-md-3 d-md-block d-none">#}
-{#                <div class="input-group">#}
-{#                    <input type="text" class="form-control" placeholder="Search" size="50">#}
-{#                    <div class="input-group-append">#}
-{#                        <button class="btn btn-warning" type="submit"><i class="fa fa-search" aria-hidden="true"></i></button>#}
-{#                    </div>#}
-{#                </div>#}
-{#            </form>#}
 
+            <!-- search form for medium and above screen it will be hidden on smaller screens -->
             <form class="form-inline ml-md-3 d-md-block d-none" action="{% url 'main:product_search' %}" method="GET">
                 <div class="input-group">
                     <input type="search" class="form-control" placeholder="Search" size="50" name="q" value="{{ request.GET.q }}">
@@ -86,6 +79,8 @@
             </ul>
             <ul></ul>
         </div>
+
+         <!-- search form for smaller and below smaller screen. it will be hidden on above smaller screens(e.g. medium and large) -->
         <form class="form-inline my-2 d-md-none" action="{% url 'main:product_search' %}" method="GET">
             <div class="input-group">
                 <input type="search" class="form-control" placeholder="Search" size="50" name="q" value="{{ request.GET.q }}">
@@ -95,6 +90,7 @@
             </div>
         </form>
     </nav>
+
     {% if messages %}
         {% for message in messages %}
             <div class="alert {% if message.tags != 'error' %} alert-{{ message.tags }} {% else %} alert-danger {% endif %} alert-dismissible fade show">
