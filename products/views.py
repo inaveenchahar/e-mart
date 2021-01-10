@@ -2,21 +2,11 @@ from django.shortcuts import render, redirect, get_object_or_404
 from .models import Category, Product
 from cart.models import CartProduct
 
-# Create your views here.
-
-
-# def category_index(request):
-#     all_categories = Category.objects.filter(visible=True).order_by('order')
-#     tcp = 0
-#     if request.user.is_authenticated:
-#         """
-#             tcp = total cart products
-#         """
-#         tcp = CartProduct.objects.filter(cart__user=request.user, cart__completed=False).count()
-#     return render(request, 'category_index.html', {'all_categories': all_categories, 'tcp': tcp})
-
 
 def category_details(request, c_slug):
+    """
+        displays all the products of a specific category
+    """
     category = get_object_or_404(Category, slug=c_slug)
     all_products = Product.objects.filter(category=category, visible=True).order_by('order')
     tcp = 0
@@ -29,13 +19,16 @@ def category_details(request, c_slug):
 
 
 def product_details(request, p_slug, id):
+    """
+        displays the details of selected product
+    """
     product = get_object_or_404(Product, slug=p_slug, id=id)
     tcp = 0
-    cart_product = None
     already_exists = False
     if request.user.is_authenticated:
         """
             tcp = total cart products
+            checks if currently selected product is already in cart or not
         """
         cart_product = CartProduct.objects.filter(cart__user=request.user, cart__completed=False)
         for p in cart_product:

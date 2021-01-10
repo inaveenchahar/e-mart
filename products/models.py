@@ -42,6 +42,10 @@ class Product(models.Model):
         return self.title
 
     def clean(self, *args, **kwargs):
+        """
+            if discounted price is greater than original price
+            to check discounted price is always kept below original price
+        """
         if self.price:
             if self.price < self.discounted_price:
                 raise UserWarning("discounted price must be less than price")
