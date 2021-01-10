@@ -4,13 +4,10 @@
 }
 
 @media screen and (max-width: 575px){
-    .razorpay-payment-button{
+    .razorpay-payment-button {
         font-size: small;
-        /*color: #fff !important;*/
         text-transform: uppercase;
         text-decoration: none;
-        /*background: #ed3330;*/
-        /*padding: 10px 0 10px 0;*/
         border-radius: 0;
         display: block;
         border: none;

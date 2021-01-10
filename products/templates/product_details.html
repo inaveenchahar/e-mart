@@ -18,7 +18,7 @@
                 </div>
                 <div class="col-lg-6">
                     <h1 class="my-2">{{ product.title }}</h1>
-{#                    <p class="my-2">in <span class="text-danger">{{ category.title }}</span></p>#}
+
                     {% if product.price %}
                         <p class="text-muted mt-3 lead"><i class="fa fa-inr my-0" aria-hidden="true"></i><span class="lead" style="text-decoration: line-through">{{ product.price | floatformat:"0" }} </span></p>
                     {% endif %}

@@ -6,7 +6,6 @@ import datetime
 
 #   only superuser can access these views
 
-
 def dashboard(request):
     """
         displays all orders related information aka dashboard

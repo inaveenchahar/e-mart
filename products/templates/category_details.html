@@ -17,7 +17,6 @@
 
         <div class="container py-md-5 py-3">
             <h2 class="mb-md-3 text-uppercase">{{ category | upper }}</h2>
-{#            <h1>{{ category.slug }}</h1>#}
             <div class="row">
                 {% for product in all_products %}
                     {% with v.docs|first as first_doc %}{{ first_doc.id }}{% endwith %}

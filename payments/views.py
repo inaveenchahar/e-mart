@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect, get_object_or_404, HttpResponse
+from django.shortcuts import render, redirect, get_object_or_404
 from .models import Order, Payment
 from cart.models import Cart, CartProduct
 from accounts.models import UserAddress
@@ -20,8 +20,6 @@ def order_history(request):
     """
     if request.user.is_authenticated:
         all_completed_carts = Cart.objects.filter(user=request.user, completed=True)
-        # all_cart_products = all_completed_carts.cartproduct_set.all()
-        # print(all_cart_products)
         all_orders = Order.objects.filter(order_by=request.user, completed=True).order_by('-added_on')
         return render(request, 'order_history.html', {'all_orders': all_orders, 'all_completed_carts': all_completed_carts})
     else:
@@ -160,7 +158,6 @@ def transaction_view(request, cart_id, order_id):
                                 " 6-7 business days\n"
                                 "Thankyou😊 for shopping with us"
                     )
-                    print('email sent')
                 except Exception as e:
                     print(e)
                 payment.save()
