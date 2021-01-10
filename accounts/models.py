@@ -7,7 +7,7 @@ from django.contrib.auth.models import User
 class UserAddress(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, help_text='Added by')
     full_name = models.CharField(max_length=50, help_text='Full Name of the user')
-    phone_no = models.CharField(max_length=10, user='Phone Number')
+    phone_no = models.CharField(max_length=10, help_text='Phone Number')
     pincode = models.CharField(max_length=6, help_text='Address Pincode')
     house_no = models.CharField(max_length=30, help_text='House/Flat no. and building name',)
     address = models.CharField(max_length=50, help_text='Area, Colony, Street, Sector, Village')
