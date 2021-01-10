@@ -5,10 +5,13 @@ from django.db.models import Sum
 import datetime
 
 
-# Create your views here.
+#   only superuser can access these views
 
 
 def dashboard(request):
+    """
+        displays all orders related information aka dashboard
+    """
     if request.user.is_superuser:
         all_orders = Cart.objects.filter(completed=True)
         yet_shipped_orders = Cart.objects.filter(completed=True, shipped=False, delivered=False)
