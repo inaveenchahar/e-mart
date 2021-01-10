@@ -1,5 +1,4 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from django.contrib.auth.models import User
 from cart.models import Cart
 from django.db.models import Sum
 import datetime
@@ -29,6 +28,9 @@ def dashboard(request):
 
 
 def all_orders(request):
+    """
+        displays all order , shipped, delivered together at one place
+    """
     if request.user.is_superuser:
         all_orders = Cart.objects.filter(completed=True)
         return render(request, 'all_orders.html', {'all_orders': all_orders})
@@ -45,6 +47,9 @@ def yet_shipped_orders(request):
 
 
 def shipped_orders(request):
+    """
+        displays all shipped orders
+    """
     if request.user.is_superuser:
         all_orders = Cart.objects.filter(completed=True, shipped=True, delivered=False)
         return render(request, 'shipped_orders.html', {'all_orders': all_orders})
@@ -53,6 +58,9 @@ def shipped_orders(request):
 
 
 def delivered_orders(request):
+    """
+        displays all delivered orders
+    """
     if request.user.is_superuser:
         all_orders = Cart.objects.filter(completed=True, shipped=True, delivered=True)
         return render(request, 'delivered_orders.html', {'all_orders': all_orders})
@@ -61,6 +69,9 @@ def delivered_orders(request):
 
 
 def order_details(request, cart_id):
+    """
+        displays all details of selected order
+    """
     if request.user.is_superuser:
         order = get_object_or_404(Cart, id=cart_id)
         return render(request, 'order_details.html', {'order': order})
@@ -69,6 +80,9 @@ def order_details(request, cart_id):
 
 
 def marked_shipped(request, cart_id):
+    """
+        marked selected order as shipped
+    """
     if request.user.is_superuser:
         cart = get_object_or_404(Cart, id=cart_id)
         cart.shipped = True
@@ -80,6 +94,9 @@ def marked_shipped(request, cart_id):
 
 
 def marked_delivered(request, cart_id):
+    """
+        marked selected order as delivered
+    """
     if request.user.is_superuser:
         cart = get_object_or_404(Cart, id=cart_id)
         if cart.shipped is True:
