@@ -13,12 +13,24 @@ from django.conf import settings
 
 
 def cart_product(request, p_slug, id):
-    product = get_object_or_404(Product, slug=p_slug, id=id)
+    """
+        adds product to the cart
+    """
+    product = get_object_or_404(Product, slug=p_slug, id=id, visible=True)
     if request.user.is_authenticated:
+        """
+            checks if a cart is already created for user or not.
+            if not then it creates a new empty cart
+        """
         if Cart.objects.filter(completed=False, user=request.user):
             cart = Cart.objects.get(completed=False, user=request.user)
         else:
             cart = Cart.objects.create(user=request.user)
+
+        """
+            checks if product is in cart or not
+            if not then adds the product to the cart
+        """
         if CartProduct.objects.filter(cart=cart, product=product):
             c_product = CartProduct.objects.get(cart=cart, product=product)
         else:
@@ -28,6 +40,9 @@ def cart_product(request, p_slug, id):
                 price=product.discounted_price,
                 quantity=0
             )
+        """
+            checks whether product quantity is not exceeds the limit set by seller for maximum product quntity
+        """
         if c_product.quantity > product.buy_limit:
             messages.warning(request, "You can only add maximum {quantity} of this product".format(quantity=product.buy_limit))
             return redirect('product:product_details', product.slug, product.id)
@@ -69,6 +84,9 @@ def cart_product(request, p_slug, id):
 
 
 def increase_quantity(request, cp_id):
+    """
+        increases the cart product quantity by 1
+    """
     if request.user.is_authenticated:
         c_product = get_object_or_404(CartProduct, id=cp_id)
         product = Product.objects.get(id=c_product.product.id)
@@ -80,10 +98,15 @@ def increase_quantity(request, cp_id):
             c_product.save()
             return redirect('cart:view_cart')
     else:
-        return HttpResponse("Login to update your cart")
+        messages.warning(request, "Login/Sing up to perform this action")
+        return redirect('cart:view_cart')
 
 
 def decrease_quantity(request, cp_id):
+    """
+        decreases the cart product quantity by 1.
+        if the quantity is 1 then it can't be decreased
+    """
     if request.user.is_authenticated:
         c_product = get_object_or_404(CartProduct, id=cp_id)
         if c_product.quantity > 1:
@@ -94,44 +117,57 @@ def decrease_quantity(request, cp_id):
             messages.error(request, 'Quantity must be 1 or more than 1')
             return redirect('cart:view_cart')
     else:
-        return HttpResponse("Login to update your cart")
+        messages.warning(request, "Login/Sing up to perform this action")
+        return redirect('cart:view_cart')
 
 
 def remove_cart_product(request, cp_id):
+    """
+        deletes the product from the cart
+    """
     if request.user.is_authenticated:
         c_product = get_object_or_404(CartProduct, id=cp_id)
         c_product.delete()
+        messages.info(request, "Product removed from cart successfully")
         return redirect('cart:view_cart')
     else:
+        messages.warning(request, "Login/Sing up to perform this action")
         return redirect('main:homepage')
 
 
-def update_cart(request):
-    if request.user.is_authenticated:
-        cart = Cart.objects.get(completed=False, user=request.user)
-        if request.method == 'POST':
-            try:
-                product = cart.cartproduct_set.get(pk=request.POST['product'])
-                p_quantity = int(request.POST['p_quantity'])
-                if p_quantity < 1:
-                    prod = CartProduct.objects.get(id=product.id)
-                    prod.delete()
-                    return redirect('cart:view_cart')
-            except (KeyError, CartProduct.DoesNotExist):
-                return HttpResponse("error occurred")
-            else:
-                product.quantity = p_quantity
-                product.save()
-                return redirect('cart:view_cart')
-    else:
-        return HttpResponse("Login to update your cart")
+# def update_cart(request):
+#     if request.user.is_authenticated:
+#         cart = Cart.objects.get(completed=False, user=request.user)
+#         if request.method == 'POST':
+#             try:
+#                 product = cart.cartproduct_set.get(pk=request.POST['product'])
+#                 p_quantity = int(request.POST['p_quantity'])
+#                 if p_quantity < 1:
+#                     prod = CartProduct.objects.get(id=product.id)
+#                     prod.delete()
+#                     return redirect('cart:view_cart')
+#             except (KeyError, CartProduct.DoesNotExist):
+#                 return HttpResponse("error occurred")
+#             else:
+#                 product.quantity = p_quantity
+#                 product.save()
+#                 return redirect('cart:view_cart')
+#     else:
+#         return HttpResponse("Login to update your cart")
 
 
 def view_cart(request):
+    """
+        displays active cart product and other cart information
+    """
     if request.user.is_authenticated:
         tcp = CartProduct.objects.filter(cart__user=request.user, cart__completed=False, product__visible=True).count()
 
         if tcp > 0:
+            """
+                update the cart total value and check if there any delivery charge applicable or not,
+                if product price, delivery charges are changed then it will update cart cart automatically
+            """
             cart = Cart.objects.filter(completed=False, user=request.user).last()
             cart_products = CartProduct.objects.filter(cart=cart)
             total = 0
@@ -140,6 +176,9 @@ def view_cart(request):
                 item.price = item.product.discounted_price
                 item.save()
             cart.cart_value = total
+            """
+                check the cart value and compares it with free delivery over seller specified free cart delivery
+            """
             if cart.cart_value > settings.CART_VALUE:
                 cart.delivery_charges = 0
             else:

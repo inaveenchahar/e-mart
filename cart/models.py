@@ -6,15 +6,15 @@ from products.models import Product
 
 
 class Cart(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    ordered_on = models.DateTimeField(null=True, blank=True)
-    cart_value = models.FloatField(default=0)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, help_text='cart user')
+    ordered_on = models.DateTimeField(null=True, blank=True, help_text='Cart Ordered by user on')
+    cart_value = models.FloatField(default=0, help_text='Cart price')
     delivery_charges = models.IntegerField(default=40)
-    completed = models.BooleanField(default=False)
+    completed = models.BooleanField(default=False, help_text='Mark this is user paid for this cart')
     shipped = models.BooleanField(default=False, help_text='Mark if cart products are shipped')
     shipped_on = models.DateField(blank=True, null=True)
-    delivered = models.BooleanField(default=False)
-    delivered_on = models.DateField(blank=True, null=True)
+    delivered = models.BooleanField(default=False, help_text='Mark if cart products are Delivered')
+    delivered_on = models.DateField(blank=True, null=True, help_text='Cart products delivered on')
     added_on = models.DateTimeField(auto_now_add=True)
     updated_on = models.DateTimeField(auto_now=True)
 
@@ -29,9 +29,9 @@ class Cart(models.Model):
 
 class CartProduct(models.Model):
     cart = models.ForeignKey(Cart, on_delete=models.CASCADE)
-    product = models.ForeignKey(Product, on_delete=models.CASCADE)
-    quantity = models.IntegerField(default=1)
-    price = models.FloatField(null=True)
+    product = models.ForeignKey(Product, on_delete=models.CASCADE, help_text='Product name')
+    quantity = models.IntegerField(default=1, help_text='Product quantity')
+    price = models.FloatField(null=True, help_text='Product price')
     added_on = models.DateTimeField(auto_now_add=True)
     updated_on = models.DateTimeField(auto_now=True)
 
