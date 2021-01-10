@@ -15,6 +15,9 @@ from django.core.mail import send_mail
 
 
 def order_history(request):
+    """
+        displays all the previous order history
+    """
     if request.user.is_authenticated:
         all_completed_carts = Cart.objects.filter(user=request.user, completed=True)
         # all_cart_products = all_completed_carts.cartproduct_set.all()
@@ -26,6 +29,9 @@ def order_history(request):
 
 
 def order_create(request, id):
+    """
+        sends a new order creation request to razorpay with required data
+    """
     if request.user.is_authenticated:
         cart = get_object_or_404(Cart, id=id, user=request.user)
         order_amount = int(cart.cart_value) * 100
@@ -81,9 +87,16 @@ def order_payment(request, cart_id, order_id):
 
 
 def payment_default_address(request, cart_id, order_id, id):
+    """
+        set default address  before proceeding to payment
+    """
     if request.user.is_authenticated:
         cart = get_object_or_404(Cart, id=cart_id, user=request.user)
         order = get_object_or_404(Order, order_id=order_id)
+        """
+            first it turns all the saved address default to False then,
+            it marked selected address to default
+        """
         for adres in UserAddress.objects.filter(user=request.user):
             adres.default_address = False
             adres.save()
@@ -91,10 +104,17 @@ def payment_default_address(request, cart_id, order_id, id):
         address.default_address = True
         address.save()
         return redirect('payment:order_payment', cart.id, order.order_id)
+    else:
+        return redirect('main:homepage')
 
 
 @csrf_exempt
 def transaction_view(request, cart_id, order_id):
+    """
+        view for transactions,
+        it sends data for transaction to razorpay and if it gets successful then
+        Payment model get created and cart, order model completed field marked true
+    """
     if request.user.is_authenticated:
         cart = get_object_or_404(Cart, id=cart_id, user=request.user)
         order = get_object_or_404(Order, order_id=order_id)
@@ -127,6 +147,9 @@ def transaction_view(request, cart_id, order_id):
                     paid_by=request.user,
                     status='CAPTURED'
                 )
+                """
+                    sends email to user registered email for informing about successful order
+                """
                 try:
                     send_mail(
                         subject="Purchase Successful",
