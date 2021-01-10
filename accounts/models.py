@@ -5,15 +5,15 @@ from django.contrib.auth.models import User
 
 
 class UserAddress(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    full_name = models.CharField(max_length=50)
-    phone_no = models.CharField(max_length=10)
-    pincode = models.CharField(max_length=6)
-    house_no = models.CharField(max_length=30, help_text='House/Flat no. and building name')
+    user = models.ForeignKey(User, on_delete=models.CASCADE, help_text='Added by')
+    full_name = models.CharField(max_length=50, help_text='Full Name of the user')
+    phone_no = models.CharField(max_length=10, user='Phone Number')
+    pincode = models.CharField(max_length=6, help_text='Address Pincode')
+    house_no = models.CharField(max_length=30, help_text='House/Flat no. and building name',)
     address = models.CharField(max_length=50, help_text='Area, Colony, Street, Sector, Village')
-    landmark = models.CharField(max_length=30, blank=True)
+    landmark = models.CharField(max_length=30, blank=True, help_text='Landmark e.g. Paras Hospital, DPS School')
     city = models.CharField(max_length=30)
-    default_address = models.BooleanField(default=False)
+    default_address = models.BooleanField(default=False, help_text='Mark this for future items to be delivered at this address')
     added_on = models.DateTimeField(auto_now_add=True)
     updated_on = models.DateTimeField(auto_now=True)
 

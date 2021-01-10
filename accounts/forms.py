@@ -62,7 +62,7 @@ class UserAddressForm(forms.ModelForm):
     }), label='Phone Number', required=True)
     pincode = forms.CharField(widget=forms.TextInput(attrs={
         'class': 'form-control',
-        # 'placeholder': 'Pincode',
+        'placeholder': 'Six digit Pincode',
         'style': 'font-size:14px',
     }), label='Pincode', required=True)
     house_no = forms.CharField(widget=forms.TextInput(attrs={

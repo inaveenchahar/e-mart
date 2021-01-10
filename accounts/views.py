@@ -7,10 +7,16 @@ from django.contrib.auth import login, logout
 from django.contrib import messages
 from django.core.mail import send_mail
 from django.conf import settings
-# Create your views here.
 
 
 def sign_up(request):
+    """
+
+    :param request:
+    :return: user account created and redirected to home page
+
+    view to sign up users
+    """
     if request.method == 'POST':
         form = SignUpForm(request.POST or None)
         if form.is_valid():
@@ -22,6 +28,9 @@ def sign_up(request):
                 email=instance.email,
                 password=instance.password
             )
+            """
+                try else is to send email
+            """
             try:
                 send_mail(
                     subject="Welcome",
@@ -42,6 +51,10 @@ def sign_up(request):
 
 
 def log_out(request):
+    """
+    :param request:
+    :return: user logged out
+    """
     if request.user.is_authenticated:
         logout(request)
         messages.error(request, 'You are logged out now.')
@@ -51,6 +64,12 @@ def log_out(request):
 
 
 def login_view(request):
+    """
+    :param request:
+    :return: user logged in
+
+    normal user will be redirected to homepage and superuser to seller dashboard
+    """
     if request.method == 'POST':
         form = LoginForm(data=request.POST)
         if form.is_valid():
@@ -67,12 +86,19 @@ def login_view(request):
 
 
 def manage_addresses(request):
+    """
+        view to add new addresses and display all stores addresses by user
+    """
     if request.user.is_authenticated:
         tcp = CartProduct.objects.filter(cart__user=request.user, cart__completed=False, product__visible=True).count()
         all_addresses = UserAddress.objects.filter(user=request.user)
         if request.method == "POST":
             address_form = UserAddressForm(request.POST)
             if address_form.is_valid():
+                """
+                   previously stored default address will be set to not-default and
+                   newly saved address will be set to default
+               """
                 for adres in UserAddress.objects.filter(user=request.user):
                     adres.default_address = False
                     adres.save()
@@ -83,6 +109,10 @@ def manage_addresses(request):
                 return redirect('accounts:manage_addresses')
         else:
             address_form = UserAddressForm()
+
+        """
+            limit the number of address can save a user
+        """
         if all_addresses.count() > 4:
             address_form = None
         return render(request, 'manage_addresses.html', {'all_addresses': all_addresses, 'address_form': address_form, 'tcp': tcp})
@@ -91,10 +121,17 @@ def manage_addresses(request):
 
 
 def delete_address(request, id):
+    """
+        deletes the selcted address from the database
+    """
     if request.user.is_authenticated:
         address = get_object_or_404(UserAddress, id=id)
         address.delete()
         if UserAddress.objects.filter(user=request.user):
+            """
+                if there are other address present in database 
+                then most recently added address will be set to default
+            """
             if not UserAddress.objects.filter(user=request.user, default_address=True).count() > 0:
                 address = UserAddress.objects.filter(user=request.user).last()
                 address.default_address = True
@@ -105,6 +142,9 @@ def delete_address(request, id):
 
 
 def select_default_address(request, id):
+    """
+        selected address will be chosen as default address for deliveries
+    """
     if request.user.is_authenticated:
         for adres in UserAddress.objects.filter(user=request.user):
             adres.default_address = False
@@ -118,8 +158,15 @@ def select_default_address(request, id):
 
 
 def update_address(request, id):
+    """
+        view to let user edit/update the selected address
+    """
     if request.user.is_authenticated:
         address = get_object_or_404(UserAddress, id=id)
+
+        """
+            filters and count the number of items in an active cart
+        """
         tcp = CartProduct.objects.filter(cart__user=request.user, cart__completed=False, product__visible=True).count()
         if request.method == 'POST':
             update_adForm = UserAddressForm(request.POST, instance=address)
