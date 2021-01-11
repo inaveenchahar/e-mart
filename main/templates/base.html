@@ -71,9 +71,9 @@
                         </div>
                     </li>
                 {% else %}
-                    <li class="nav-item">
-                        <a href="{% url 'accounts:login' %}" class="btn nav-link font-weight-bold text-uppercase btn-light border text-dark px-3 d-inline-block mr-md-2">Login</a>
-                        <a href="{% url 'accounts:sign_up' %}" class="btn btn-warning nav-link font-weight-bold text-uppercase text-dark px-4 d-inline-block">Sign Up</a>
+                    <li class="nav-item clearfix text-left">
+                        <a href="{% url 'accounts:login' %}" class="btn nav-link font-weight-bold text-uppercase btn-light border text-dark px-5 px-md-3 d-inline-block mr-md-2">Login</a>
+                        <a href="{% url 'accounts:sign_up' %}" class="btn btn-warning nav-link font-weight-bold text-uppercase text-dark px-5 px-md-4 float-right float-md-none d-inline-block">Sign Up</a>
                     </li>
                 {% endif %}
             </ul>
@@ -81,7 +81,7 @@
         </div>
 
          <!-- search form for smaller and below smaller screen. it will be hidden on above smaller screens(e.g. medium and large) -->
-        <form class="form-inline my-2 d-md-none" action="{% url 'main:product_search' %}" method="GET">
+        <form class="form-inline mt-1 mb-2 d-md-none" action="{% url 'main:product_search' %}" method="GET">
             <div class="input-group">
                 <input type="search" class="form-control" placeholder="Search" size="50" name="q" value="{{ request.GET.q }}">
                 <div class="input-group-append">
